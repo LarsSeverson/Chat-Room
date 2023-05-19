@@ -8,7 +8,14 @@ class WindowUI:
 
         self.width = main_window.width
         self.height = main_window.height
+        self.line_x = 60
         self.menu_is_open = False
+
+        self.left_frame = QtWidgets.QFrame(self.central_widget)
+        self.left_frame.setGeometry(QtCore.QRect(0,0, self.line_x, self.height))
+        self.left_frame.setStyleSheet("background-color: white;")
+
+
         self.menu()
 
         # self.menu_bar = QtWidgets.QMenuBar(main_window)
@@ -25,10 +32,12 @@ class WindowUI:
     def menu(self):
         # start menu_line:
         self.menu_line = QtWidgets.QFrame(self.central_widget)        
-        self.menu_line.setGeometry(QtCore.QRect(50,0,20,self.height))
+        self.menu_line.setGeometry(QtCore.QRect(self.line_x, 0, 2, self.height))
+        self.menu_line.setLineWidth(22)
         self.menu_line.setFrameShape(QtWidgets.QFrame.VLine)
         self.menu_line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.menu_line.setObjectName('menu_line')        
+        self.menu_line.setObjectName('menu_line')    
+        self.menu_line.setStyleSheet('border: none; background-color: rgb(229, 229, 229);')    
         # end menu_line
 
         # start menu_button
@@ -36,13 +45,7 @@ class WindowUI:
         self.menu_button.setEnabled(True)
         self.menu_button.setGeometry(QtCore.QRect(10,10,41,41))
         self.menu_button.setAutoFillBackground(False)
-        self.menu_button.setStyleSheet(
-        '''
-        QPushButton
-        {
-            border:none;
-        }
-        ''')
+        self.menu_button.setStyleSheet('border: none;')
         
         self.menu_icon = QtGui.QIcon()
         self.menu_icon_open = QtGui.QIcon()
@@ -58,31 +61,40 @@ class WindowUI:
         # end menu_button
 
     def menu_open(self):
+        self.left_anim = QtCore.QPropertyAnimation(self.left_frame, b'geometry')
         self.line_anim = QtCore.QPropertyAnimation(self.menu_line, b'geometry')
         self.menu_anim = QtCore.QPropertyAnimation(self.menu_button, b'geometry')
-        self.menu_anim.setDirection(150)
+        self.left_anim.setDuration(150)
+        self.menu_anim.setDuration(150)
         self.line_anim.setDuration(150)
 
         if self.menu_is_open:
-            self.line_anim.setStartValue(QtCore.QRect(150, 0, 20, self.height))
-            self.line_anim.setEndValue(QtCore.QRect(50, 0, 20, self.height))
+            self.left_anim.setStartValue(QtCore.QRect(0,0, self.line_x, self.height))
+            self.line_anim.setStartValue(QtCore.QRect(self.line_x, 0, 2, self.height))
             self.menu_anim.setStartValue(QtCore.QRect(110, 10, 41,41))
-            self.menu_anim.setStartValue(QtCore.QRect(10, 10, 41,41))
-            
+            self.line_x = 60
+            self.line_anim.setEndValue(QtCore.QRect(self.line_x, 0, 2, self.height))
+            self.menu_anim.setEndValue(QtCore.QRect(10, 10, 41,41))
+            self.left_anim.setEndValue(QtCore.QRect(0,0, self.line_x, self.height))
+
             self.menu_button.setIcon(self.menu_icon)
             self.menu_is_open = False
+
         else:
-            self.line_anim.setStartValue(QtCore.QRect(50,0,20, self.height))
-            self.line_anim.setEndValue(QtCore.QRect(150, 0, 20, self.height))
+            self.left_anim.setStartValue(QtCore.QRect(0,0, self.line_x, self.height))
+            self.line_anim.setStartValue(QtCore.QRect(60,0, 2, self.height))
             self.menu_anim.setStartValue(QtCore.QRect(10, 10, 41,41))
-            self.menu_anim.setStartValue(QtCore.QRect(110, 10, 41,41))
-            
+            self.line_x = 150
+            self.line_anim.setEndValue(QtCore.QRect(self.line_x, 0, 2, self.height))
+            self.menu_anim.setEndValue(QtCore.QRect(110, 10, 41,41))
+            self.left_anim.setEndValue(QtCore.QRect(0,0, self.line_x, self.height)) 
+
             self.menu_button.setIcon(self.menu_icon_open)
             self.menu_is_open = True
 
+        self.left_anim.start()
         self.line_anim.start()
         self.menu_anim.start()
-        
     def menu_button_hover(self, event):
         self.menu_button.setIconSize(QtCore.QSize(40, 60))
     def menu_button_unhover(self, event):

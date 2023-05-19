@@ -1,6 +1,6 @@
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import *
-from PyQt5 import QtGui
+from PyQt5.QtGui import QPainter, QColor, QBrush
 
 from UI.window_ui import WindowUI
 
@@ -18,6 +18,7 @@ class Window(QMainWindow):
         self.height = self.screen_geometry.height()
 
         self.setup_ui()
+
 
     def setup_ui(self):
         self.ui = WindowUI(self)
