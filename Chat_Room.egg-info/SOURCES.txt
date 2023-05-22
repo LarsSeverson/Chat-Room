@@ -4,6 +4,3 @@ Chat_Room.egg-info/PKG-INFO
 Chat_Room.egg-info/SOURCES.txt
 Chat_Room.egg-info/dependency_links.txt
 Chat_Room.egg-info/top_level.txt
-UI/__init__.py
-UI/window.py
-UI/window_ui.py

@@ -10,7 +10,7 @@ class Window(QMainWindow):
         super(Window, self).__init__()
         self.setGeometry(200,200, 1280,720)
         self.setWindowTitle('Chat-Room')
-        self.setWindowIcon(QtGui.QIcon('./UI/assets/icon.png'))
+        self.setWindowIcon(QtGui.QIcon('src/UI/assets/icon.png'))
         self.setAnimated(True)
 
         self.screen_geometry = QtWidgets.QDesktopWidget().screenGeometry()
