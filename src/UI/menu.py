@@ -1,8 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from UI.menu_button import MenuButton
 
 class Menu:
     def __init__(self, window) -> None:
 
+        self.menu_buttons = []
         self.menu_is_open = False
         self.line_x = 60
         self.w_width = window.width
@@ -20,27 +22,23 @@ class Menu:
         self.menu_line.setObjectName('menu_line')    
         self.menu_line.setStyleSheet('border: none; background-color: rgb(229, 229, 229);')  
     
-        # start menu_button
-        self.menu_button = QtWidgets.QPushButton(window.central_widget)
-        self.menu_button.setEnabled(True)
-        self.menu_button.setGeometry(QtCore.QRect(10,10,41,41))
-        self.menu_button.setAutoFillBackground(False)
-        self.menu_button.setStyleSheet('border: none;')
-        
-        self.menu_icon = QtGui.QIcon()
-        self.menu_icon_open = QtGui.QIcon()
-        self.menu_icon.addPixmap(QtGui.QPixmap("src/UI/assets/menu_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.menu_icon_open.addPixmap(QtGui.QPixmap("src/UI/assets/menu_icon_open.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-
-        self.menu_button.setIcon(self.menu_icon)
-        self.menu_button.setIconSize(QtCore.QSize(35, 55))
-        self.menu_button.enterEvent = self.menu_hover
-        self.menu_button.leaveEvent = self.menu_unhover
+        self.menu_button = MenuButton(window.central_widget)
         self.menu_button.clicked.connect(self.menu_open)
-        self.menu_button.setObjectName('menu_button')
-        # end menu_button
+
+        self.chat_button = QtWidgets.QPushButton(window.central_widget)
+        self.set_chat_button()
+        self.profile_button = QtWidgets.QPushButton(window.central_widget)
+        self.set_profile_button()
 
         self.init_animations()
+
+    # def open_button(self, button):
+    #     self.reset_buttons(button)
+
+    # def reset_buttons(self, no_change):
+    #     for button in self.menu_buttons:
+    #         if button.type != no_change:
+    #             button.reset()
 
     def init_animations(self):
         self.left_anim = QtCore.QPropertyAnimation(self.left_frame, b'geometry')
@@ -49,6 +47,58 @@ class Menu:
         self.left_anim.setDuration(150)
         self.menu_anim.setDuration(150)
         self.line_anim.setDuration(150)
+
+    def set_chat_button(self):
+        self.chat_button.setEnabled(True)
+        self.chat_button.setGeometry(QtCore.QRect(0,60,61,61))
+        self.chat_button.setAutoFillBackground(False)
+        self.chat_button.setStyleSheet('''
+        QPushButton{
+            border:none;
+        }
+        QPushButton:hover{
+            border-top: 10px solid white;
+            border-left: 5px solid rgb(229, 229, 229);
+            border-right: 5px solid rgb(229, 229, 229);
+            border-bottom: 10px solid white;
+        }
+        ''')
+
+        self.chat_icon = QtGui.QIcon()
+        self.chat_icon.addPixmap(QtGui.QPixmap("src/UI/assets/chat.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
+        self.chat_button.setIcon(self.chat_icon)
+        self.chat_button.setIconSize(QtCore.QSize(35, 55))
+
+        self.chat_button.clicked.connect(self.chat_open)
+
+        self.chat_button.setObjectName('chat_button')
+        
+    def set_profile_button(self):
+        self.profile_button.setEnabled(True)
+        self.profile_button.setGeometry(QtCore.QRect(0,130,61,61))
+        self.profile_button.setAutoFillBackground(False)
+        self.profile_button.setStyleSheet('''
+        QPushButton{
+            border:none;
+        }
+        QPushButton:hover{
+            border-top: 10px solid white;
+            border-left: 5px solid rgb(229, 229, 229);
+            border-right: 5px solid rgb(229, 229, 229);
+            border-bottom: 10px solid white;
+        }
+        ''')
+
+        self.profile_icon = QtGui.QIcon()
+        self.profile_icon.addPixmap(QtGui.QPixmap("src/UI/assets/profile.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
+        self.profile_button.setIcon(self.profile_icon)
+        self.profile_button.setIconSize(QtCore.QSize(35, 55))
+
+        self.profile_button.clicked.connect(self.profile_open)
+
+        self.profile_button.setObjectName('profile_button')
     
     def menu_open(self):
         if self.menu_is_open:
@@ -63,7 +113,7 @@ class Menu:
         self.menu_anim.setEndValue(QtCore.QRect(110, 10, 41,41))
         self.left_anim.setEndValue(QtCore.QRect(0,0, self.line_x, self.w_height)) 
 
-        self.menu_button.setIcon(self.menu_icon_open)        
+        self.menu_button.setIcon(self.menu_button.menu_icon_open)        
 
         self.left_anim.start()
         self.line_anim.start()
@@ -80,14 +130,28 @@ class Menu:
         self.menu_anim.setEndValue(QtCore.QRect(10, 10, 41,41))
         self.left_anim.setEndValue(QtCore.QRect(0,0, self.line_x, self.w_height))
 
-        self.menu_button.setIcon(self.menu_icon)
+        self.menu_button.setIcon(self.menu_button.menu_icon)
 
         self.left_anim.start()
         self.line_anim.start()
         self.menu_anim.start()
 
         self.menu_is_open = False
-    def menu_hover(self, event):
-        self.menu_button.setIconSize(QtCore.QSize(40, 60))
-    def menu_unhover(self, event):
-        self.menu_button.setIconSize(QtCore.QSize(35, 55))
+    def chat_open(self):
+        self.chat_button.setStyleSheet('''
+        QPushButton{
+            border-top: 10px solid white;
+            border-left: 5px solid rgb(229, 229, 229);
+            border-right: 5px solid rgb(229, 229, 229);
+            border-bottom: 10px solid white;
+        }
+        ''')
+    def profile_open(self):
+        self.profile_button.setStyleSheet('''
+        QPushButton{
+            border-top: 10px solid white;
+            border-left: 5px solid rgb(229, 229, 229);
+            border-right: 5px solid rgb(229, 229, 229);
+            border-bottom: 10px solid white;
+        }
+        ''')        
