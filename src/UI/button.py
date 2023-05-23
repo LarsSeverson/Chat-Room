@@ -1,5 +1,13 @@
+from enum import Enum
+
+class Type(Enum):
+    MENU = 1,
+    CHAT = 2,
+    PROFILE = 3
+
+
 class ButtonStyleSheets:
-    default_menu = '''
+    default = '''
         QPushButton{
             border:none;
         }

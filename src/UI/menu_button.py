@@ -1,9 +1,11 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
-from UI.button import ButtonStyleSheets
+from UI.button import *
 
 class MenuButton(QtWidgets.QPushButton):
     def __init__(self, central_widget=None) -> None:
         super().__init__(central_widget)
+
+        self.type = Type.MENU
         
         self.setEnabled(True)
         self.setGeometry(0,0,61,51)
@@ -28,3 +30,6 @@ class MenuButton(QtWidgets.QPushButton):
         self.setIconSize(QtCore.QSize(40, 60))
     def menu_unhover(self, event):
         self.setIconSize(QtCore.QSize(35, 55))
+
+    def reset(self):
+        ...

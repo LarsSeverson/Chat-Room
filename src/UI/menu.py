@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from UI.menu_button import MenuButton
+from UI.chat_ui import ChatButton
+from UI.profile_ui import ProfileButton
 
 class Menu:
     def __init__(self, window) -> None:
@@ -24,21 +26,24 @@ class Menu:
     
         self.menu_button = MenuButton(window.central_widget)
         self.menu_button.clicked.connect(self.menu_open)
+        self.menu_buttons.append(self.menu_button)
 
-        self.chat_button = QtWidgets.QPushButton(window.central_widget)
-        self.set_chat_button()
-        self.profile_button = QtWidgets.QPushButton(window.central_widget)
-        self.set_profile_button()
+        self.chat_button = ChatButton(window.central_widget)
+        self.chat_button.clicked.connect(lambda : self.open_button(self.chat_button.type))
+        self.menu_buttons.append(self.chat_button)
+
+        self.profile_button = ProfileButton(window.central_widget)
+        self.profile_button.clicked.connect(lambda : self.open_button(self.profile_button.type))
+        self.menu_buttons.append(self.profile_button)        
 
         self.init_animations()
 
-    # def open_button(self, button):
-    #     self.reset_buttons(button)
-
-    # def reset_buttons(self, no_change):
-    #     for button in self.menu_buttons:
-    #         if button.type != no_change:
-    #             button.reset()
+    def open_button(self, type):
+        for button in self.menu_buttons:
+            if button.type != type:
+                button.reset()
+            else:
+                button.open()
 
     def init_animations(self):
         self.left_anim = QtCore.QPropertyAnimation(self.left_frame, b'geometry')
@@ -47,58 +52,7 @@ class Menu:
         self.left_anim.setDuration(150)
         self.menu_anim.setDuration(150)
         self.line_anim.setDuration(150)
-
-    def set_chat_button(self):
-        self.chat_button.setEnabled(True)
-        self.chat_button.setGeometry(QtCore.QRect(0,60,61,61))
-        self.chat_button.setAutoFillBackground(False)
-        self.chat_button.setStyleSheet('''
-        QPushButton{
-            border:none;
-        }
-        QPushButton:hover{
-            border-top: 10px solid white;
-            border-left: 5px solid rgb(229, 229, 229);
-            border-right: 5px solid rgb(229, 229, 229);
-            border-bottom: 10px solid white;
-        }
-        ''')
-
-        self.chat_icon = QtGui.QIcon()
-        self.chat_icon.addPixmap(QtGui.QPixmap("src/UI/assets/chat.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-
-        self.chat_button.setIcon(self.chat_icon)
-        self.chat_button.setIconSize(QtCore.QSize(35, 55))
-
-        self.chat_button.clicked.connect(self.chat_open)
-
-        self.chat_button.setObjectName('chat_button')
         
-    def set_profile_button(self):
-        self.profile_button.setEnabled(True)
-        self.profile_button.setGeometry(QtCore.QRect(0,130,61,61))
-        self.profile_button.setAutoFillBackground(False)
-        self.profile_button.setStyleSheet('''
-        QPushButton{
-            border:none;
-        }
-        QPushButton:hover{
-            border-top: 10px solid white;
-            border-left: 5px solid rgb(229, 229, 229);
-            border-right: 5px solid rgb(229, 229, 229);
-            border-bottom: 10px solid white;
-        }
-        ''')
-
-        self.profile_icon = QtGui.QIcon()
-        self.profile_icon.addPixmap(QtGui.QPixmap("src/UI/assets/profile.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-
-        self.profile_button.setIcon(self.profile_icon)
-        self.profile_button.setIconSize(QtCore.QSize(35, 55))
-
-        self.profile_button.clicked.connect(self.profile_open)
-
-        self.profile_button.setObjectName('profile_button')
     
     def menu_open(self):
         if self.menu_is_open:
@@ -136,22 +90,4 @@ class Menu:
         self.line_anim.start()
         self.menu_anim.start()
 
-        self.menu_is_open = False
-    def chat_open(self):
-        self.chat_button.setStyleSheet('''
-        QPushButton{
-            border-top: 10px solid white;
-            border-left: 5px solid rgb(229, 229, 229);
-            border-right: 5px solid rgb(229, 229, 229);
-            border-bottom: 10px solid white;
-        }
-        ''')
-    def profile_open(self):
-        self.profile_button.setStyleSheet('''
-        QPushButton{
-            border-top: 10px solid white;
-            border-left: 5px solid rgb(229, 229, 229);
-            border-right: 5px solid rgb(229, 229, 229);
-            border-bottom: 10px solid white;
-        }
-        ''')        
+        self.menu_is_open = False 
