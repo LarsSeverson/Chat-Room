@@ -13,14 +13,11 @@ class Window(QMainWindow):
         self.setWindowIcon(QtGui.QIcon('src/UI/assets/icon.png'))
         self.setAnimated(True)
 
-        self.screen_geometry = QtWidgets.QDesktopWidget().screenGeometry()
-        self.width = self.screen_geometry.width()
-        self.height = self.screen_geometry.height()
-
         self.setup_ui()
         
 
     def setup_ui(self):
+        print(self.width)
         self.ui = WindowUI(self)
     
     def button_event(self, type):

@@ -4,39 +4,38 @@ from UI.chat_ui import ChatButton
 from UI.profile_ui import ProfileButton
 
 class Menu:
-    def __init__(self, window) -> None:
+    def __init__(self, central_widget, width, height) -> None:
         self.menu_buttons = []
         self.menu_is_open = False
         self.line_x = 60
-        self.w_width = window.width
-        self.w_height = window.height
+        self.w_width = width
+        self.w_height = height
 
-        self.left_frame = QtWidgets.QFrame(window.central_widget)
-        self.left_frame.setGeometry(QtCore.QRect(0,0, self.line_x, window.height))
+        self.left_frame = QtWidgets.QFrame(central_widget)
+        self.left_frame.setGeometry(QtCore.QRect(0,0, self.line_x, height))
         self.left_frame.setStyleSheet("background-color: white;")
 
-        self.menu_line = QtWidgets.QFrame(window.central_widget)        
-        self.menu_line.setGeometry(QtCore.QRect(self.line_x, 0, 2, window.height))
+        self.menu_line = QtWidgets.QFrame(central_widget)        
+        self.menu_line.setGeometry(QtCore.QRect(self.line_x, 0, 2, height))
         self.menu_line.setLineWidth(22)
         self.menu_line.setFrameShape(QtWidgets.QFrame.VLine)
         self.menu_line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.menu_line.setObjectName('menu_line')
         self.menu_line.setStyleSheet('border: none; background-color: rgb(229, 229, 229);')  
     
-        self.menu_button = MenuButton(window.central_widget)
+        self.menu_button = MenuButton(central_widget)
         self.menu_button.clicked.connect(self.menu_open)
         self.menu_buttons.append(self.menu_button)
 
-        self.chat_button = ChatButton(window.central_widget)
+        self.chat_button = ChatButton(central_widget)
         self.chat_button.clicked.connect(self.open_chat)
         self.menu_buttons.append(self.chat_button)
 
-        self.profile_button = ProfileButton(window.central_widget)
+        self.profile_button = ProfileButton(central_widget)
         self.profile_button.clicked.connect(self.open_profile)
         self.menu_buttons.append(self.profile_button) 
        
         self.init_animations()
-
 
     def open_chat(self):
         for button in self.menu_buttons:
