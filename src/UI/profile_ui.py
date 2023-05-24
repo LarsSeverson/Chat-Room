@@ -6,6 +6,7 @@ class ProfileButton(QtWidgets.QPushButton):
         super().__init__(central_widget)
 
         self.type = Type.PROFILE
+        self.is_open = False
         
         self.setEnabled(True)
         self.setGeometry(0,130,61,61)
@@ -29,6 +30,8 @@ class ProfileButton(QtWidgets.QPushButton):
             border-bottom: 10px solid white;
         }
         ''')
+        self.is_open = True
 
     def reset(self):
         self.setStyleSheet(ButtonStyleSheets.default)
+        self.is_open = False

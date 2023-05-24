@@ -5,7 +5,6 @@ from UI.profile_ui import ProfileButton
 
 class Menu:
     def __init__(self, window) -> None:
-
         self.menu_buttons = []
         self.menu_is_open = False
         self.line_x = 60
@@ -21,7 +20,7 @@ class Menu:
         self.menu_line.setLineWidth(22)
         self.menu_line.setFrameShape(QtWidgets.QFrame.VLine)
         self.menu_line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.menu_line.setObjectName('menu_line')    
+        self.menu_line.setObjectName('menu_line')
         self.menu_line.setStyleSheet('border: none; background-color: rgb(229, 229, 229);')  
     
         self.menu_button = MenuButton(window.central_widget)
@@ -29,21 +28,31 @@ class Menu:
         self.menu_buttons.append(self.menu_button)
 
         self.chat_button = ChatButton(window.central_widget)
-        self.chat_button.clicked.connect(lambda : self.open_button(self.chat_button.type))
+        self.chat_button.clicked.connect(self.open_chat)
         self.menu_buttons.append(self.chat_button)
 
         self.profile_button = ProfileButton(window.central_widget)
-        self.profile_button.clicked.connect(lambda : self.open_button(self.profile_button.type))
-        self.menu_buttons.append(self.profile_button)        
-
+        self.profile_button.clicked.connect(self.open_profile)
+        self.menu_buttons.append(self.profile_button) 
+       
         self.init_animations()
 
-    def open_button(self, type):
+
+    def open_chat(self):
         for button in self.menu_buttons:
-            if button.type != type:
+            if button.type != self.chat_button.type:
                 button.reset()
-            else:
-                button.open()
+        if not self.chat_button.is_open:
+            self.chat_button.open()
+            self.chat_callback()
+
+    def open_profile(self):
+        for button in self.menu_buttons:
+            if button.type != self.profile_button.type:
+                button.reset()
+        if not self.profile_button.is_open:
+            self.profile_button.open()
+            self.profile_callback()
 
     def init_animations(self):
         self.left_anim = QtCore.QPropertyAnimation(self.left_frame, b'geometry')
@@ -91,3 +100,8 @@ class Menu:
         self.menu_anim.start()
 
         self.menu_is_open = False 
+    
+    def set_chat_callback(self, func):
+        self.chat_callback = func
+    def set_profile_callback(self, func):
+        self.profile_callback = func

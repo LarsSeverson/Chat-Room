@@ -18,7 +18,10 @@ class Window(QMainWindow):
         self.height = self.screen_geometry.height()
 
         self.setup_ui()
-
+        
 
     def setup_ui(self):
         self.ui = WindowUI(self)
+    
+    def button_event(self, type):
+        pass
