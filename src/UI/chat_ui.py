@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QFont, QFontMetricsF
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 from UI.button import *
 
 class ChatButton(QtWidgets.QPushButton):
@@ -39,14 +39,60 @@ class ChatButton(QtWidgets.QPushButton):
         self.setStyleSheet(ButtonStyleSheets.default)
         self.is_open = False
 
-class ChatUI:
-    def __init__(self, main_window) -> None:
-
-        self.chat_open = False
-        
+class ChatBox(QTextEdit):
+    def __init__(self, parent):
+        super().__init__(parent.chat_frame)
         self.font = QFont()
         self.font.setFamily('Comic Sans MS')
         self.font.setPointSize(11)
+
+        self.p_height = parent.height
+
+        self.setGeometry(parent.x-50, parent.height - 50, parent.width-20,35)
+        self.setStyleSheet('''     
+        border-radius: 15px;
+        background-color: white;
+        padding-top: 2px;
+        padding-left: 10px;
+        padding-right: 10px;
+        ''')
+
+        self.setPlaceholderText('Type message')
+        self.setFont(self.font)
+        self.setObjectName('chat_box')
+        self.textChanged.connect(self.handle_height)
+
+        self.last_height = 35
+
+        self.scrollbar = self.verticalScrollBar()
+        self.scrollbar.setStyleSheet('width: 0px;')
+        self.scrollbar.setVisible(False)
+
+    def keyPressEvent(self, e: QKeyEvent) -> None:
+        if e.key() == Qt.Key.Key_Return or e.key() == Qt.Key_Enter:
+            return
+        return super().keyPressEvent(e)
+
+    def handle_height(self):
+        curr_height = self.height()
+        height = int(self.document().size().height())
+        if height > 35:
+
+            self.setFixedHeight(height)
+            if height < self.last_height:
+                self.move(self.x(), self.y() + (curr_height - height))    
+            else:
+                self.move(self.x(), self.y() - (height - curr_height))
+            self.last_height = height
+
+        else:
+            self.setFixedHeight(35) 
+            self.move(self.x(), self.p_height - 50)
+
+class ChatUI():
+    def __init__(self, main_window) -> None:
+
+        self.chat_open = False
 
         self.x = main_window.get_line_seperator()
         self.y = 0
@@ -56,26 +102,9 @@ class ChatUI:
         self.chat_frame = QFrame(main_window.central_widget)
         self.chat_frame.setGeometry(self.x, self.y, self.width, self.height)
 
-        self.chat_box = QTextEdit(self.chat_frame)
-        self.chat_box.setGeometry(self.x-50, self.height - 50, self.width-20,35)
-        self.chat_box.setStyleSheet('''     
-        border-radius: 15px;
-        background-color: white;
-        padding-top: 2px;
-        padding-left: 10px;
-        padding-right: 10px;
-        ''')
-        self.chat_box.setPlaceholderText('Type message')
-        self.chat_box.setFont(self.font)
-        self.chat_box.setObjectName('chat_box')
-        self.chat_box.textChanged.connect(self.handle_height)
-
-        self.last_height = 35
-
-        self.scrollbar = self.chat_box.verticalScrollBar()
-        self.scrollbar.setVisible(False)
-        
         self.chat_frame.setVisible(False)
+
+        self.chat_box = ChatBox(self)
 
     def open(self):
         self.chat_open = True
@@ -84,19 +113,3 @@ class ChatUI:
     def close(self):
         self.chat_open = False
         self.chat_frame.setVisible(False)
-
-    def handle_height(self):
-        curr_height = self.chat_box.height()
-        height = int(self.chat_box.document().size().height())
-        if height > 35:
-
-            self.chat_box.setFixedHeight(height)
-            if height < self.last_height:
-                self.chat_box.move(self.chat_box.x(), self.chat_box.y() + (curr_height - height))    
-            else:
-                self.chat_box.move(self.chat_box.x(), self.chat_box.y() - (height - curr_height))
-            self.last_height = height
-            
-        else:
-            self.chat_box.setFixedHeight(35) 
-            self.chat_box.move(self.chat_box.x(), self.height - 50)
