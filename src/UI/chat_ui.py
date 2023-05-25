@@ -42,6 +42,7 @@ class ChatButton(QtWidgets.QPushButton):
 class ChatBox(QTextEdit):
     def __init__(self, parent):
         super().__init__(parent.chat_frame)
+
         self.font = QFont()
         self.font.setFamily('Comic Sans MS')
         self.font.setPointSize(11)
@@ -60,7 +61,7 @@ class ChatBox(QTextEdit):
         self.setPlaceholderText('Type message')
         self.setFont(self.font)
         self.setObjectName('chat_box')
-        self.textChanged.connect(self.handle_height)
+        self.textChanged.connect(self.text)
 
         self.last_height = 35
 
@@ -68,10 +69,50 @@ class ChatBox(QTextEdit):
         self.scrollbar.setStyleSheet('width: 0px;')
         self.scrollbar.setVisible(False)
 
+        self.send_button = QPushButton(self)
+        self.send_button.setGeometry(self.width() - 30, 5, 27, 25)
+        self.send_button.setObjectName('senderbud')
+        self.send_icon = QtGui.QIcon()
+        self.send_idle_icon = QtGui.QIcon()
+        self.send_icon.addPixmap(QtGui.QPixmap("src/UI/assets/send.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.send_idle_icon.addPixmap(QtGui.QPixmap("src/UI/assets/send_idle.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.send_button.setIcon(self.send_idle_icon)
+        self.send_button.setIconSize(QtCore.QSize(25, 25))     
+        self.send_button.clicked.connect(self.send_message)     
+
     def keyPressEvent(self, e: QKeyEvent) -> None:
         if e.key() == Qt.Key.Key_Return or e.key() == Qt.Key_Enter:
             return
         return super().keyPressEvent(e)
+    
+    def send_message(self):
+        if len(self.toPlainText()):
+            print('msg')
+
+    def text(self):
+        self.handle_height()
+
+        if len(self.toPlainText()) == 0:
+            self.send_button.setIcon(self.send_idle_icon)
+            self.send_button.setStyleSheet('''
+            QPushButton#sender_button {
+                background-color: transparent;
+                border: none;
+            }
+            ''')
+        else:
+            self.send_button.setIcon(self.send_icon)
+            self.send_button.setStyleSheet('''
+            QPushButton#sender_button {
+                background-color: transparent;
+                border: none;
+            }
+            QPushButton#senderbud:hover{
+                border-radius: 12px;
+                background-color: rgb(229, 229, 229);
+            }
+            ''')  
+
 
     def handle_height(self):
         curr_height = self.height()
