@@ -1,4 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton
+
 from UI.menu import Menu
 from UI.chat_ui import ChatUI
 from UI.button import *
@@ -8,6 +10,10 @@ class WindowUI:
         self.window = main_window
         self.central_widget = QtWidgets.QWidget(main_window)
         self.central_widget.setObjectName('central_widget')
+
+        self.horizontal_layout = QHBoxLayout(self.central_widget)
+        self.horizontal_layout.setObjectName('horizontal_layout')
+
         main_window.setCentralWidget(self.central_widget)
 
         self.width = main_window.width()

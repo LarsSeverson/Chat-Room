@@ -89,6 +89,8 @@ class ChatBox(QTextEdit):
         if len(self.toPlainText()):
             print('msg')
 
+            self.clear()
+
     def text(self):
         self.handle_height()
 
