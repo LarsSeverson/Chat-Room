@@ -8,32 +8,33 @@ from UI.button import *
 class WindowUI:
     def __init__(self, main_window):
         self.window = main_window
-        self.central_widget = QtWidgets.QWidget(main_window)
+
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        size_policy.setHorizontalStretch(100)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(main_window.sizePolicy().hasHeightForWidth())
+        main_window.setSizePolicy(size_policy)
+
+        self.central_widget = QWidget(main_window)
         self.central_widget.setObjectName('central_widget')
+        self.central_widget.setStyleSheet('background-color: white;')
 
         self.horizontal_layout = QHBoxLayout(self.central_widget)
+        self.horizontal_layout.setContentsMargins(0,0,0,0)
+        self.horizontal_layout.setSpacing(0)
         self.horizontal_layout.setObjectName('horizontal_layout')
 
-        main_window.setCentralWidget(self.central_widget)
+        self.menu = Menu(self.central_widget)
 
-        self.width = main_window.width()
-        self.height = main_window.height()
-
-        self.menu = Menu(self.central_widget, self.width, self.height)
         self.menu.set_chat_callback(self.open_chat)
         self.menu.set_profile_callback(self.open_profile)
 
-        self.chat = ChatUI(self)
+        self.chat = ChatUI(self.central_widget)
 
-        # self.menu_bar = QtWidgets.QMenuBar(main_window)
-        # self.menu_bar.setGeometry(QtCore.QRect(0,0,992,21))
-        # self.menu_bar.setObjectName('menu_bar')
-        # main_window.setMenuBar(self.menu_bar)
+        self.horizontal_layout.addWidget(self.menu.get_frame())
+        self.horizontal_layout.addLayout(self.chat.get_layout())
 
-        # self.status_bar = QtWidgets.QStatusBar(main_window)
-        # self.status_bar.setObjectName('status_bar')
-        # main_window.setStatusBar(self.status_bar)
-
+        main_window.setCentralWidget(self.central_widget)
         QtCore.QMetaObject.connectSlotsByName(main_window)
 
         self.menu.open_chat()
@@ -43,5 +44,5 @@ class WindowUI:
     
     def open_profile(self):
         self.chat.close()
-    def get_line_seperator(self):
-        return self.menu.line_x
+    def resize_signal(self, width, height):
+        self.chat.resize_signal(width, height)

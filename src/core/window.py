@@ -22,3 +22,7 @@ class Window(QMainWindow):
     
     def button_event(self, type):
         pass
+    
+    def resizeEvent(self, event) -> None:
+        self.ui.resize_signal(self.width(), self.height())
+        return super().resizeEvent(event)

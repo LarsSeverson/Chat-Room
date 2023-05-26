@@ -9,7 +9,7 @@ class ProfileButton(QtWidgets.QPushButton):
         self.is_open = False
         
         self.setEnabled(True)
-        self.setGeometry(0,130,61,61)
+        self.setGeometry(0,110,51,51)
         self.setAutoFillBackground(False)
         self.setStyleSheet(ButtonStyleSheets.default)
 

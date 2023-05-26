@@ -8,7 +8,7 @@ class MenuButton(QtWidgets.QPushButton):
         self.type = Type.MENU
         
         self.setEnabled(True)
-        self.setGeometry(0,0,61,51)
+        self.setGeometry(0,0,51,51)
         self.setAutoFillBackground(False)
         self.setStyleSheet('border: none')
 
@@ -18,7 +18,7 @@ class MenuButton(QtWidgets.QPushButton):
         self.menu_icon_open.addPixmap(QtGui.QPixmap("src/UI/assets/menu_icon_open.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
         self.setIcon(self.menu_icon)
-        self.setIconSize(QtCore.QSize(35, 55))    
+        self.setIconSize(QtCore.QSize(35, 35))    
 
         self.enterEvent = self.menu_hover
         self.leaveEvent = self.menu_unhover

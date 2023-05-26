@@ -12,7 +12,7 @@ class ChatButton(QtWidgets.QPushButton):
         self.is_open = False
         
         self.setEnabled(True)
-        self.setGeometry(0,60,61,61)
+        self.setGeometry(0,55,51,51)
         self.setAutoFillBackground(False)
         self.setStyleSheet(ButtonStyleSheets.default)
 
@@ -20,7 +20,7 @@ class ChatButton(QtWidgets.QPushButton):
         self.chat_icon.addPixmap(QtGui.QPixmap("src/UI/assets/chat.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
         self.setIcon(self.chat_icon)
-        self.setIconSize(QtCore.QSize(35, 55))    
+        self.setIconSize(QtCore.QSize(35, 35))    
 
         self.setObjectName('chat_button')
     
@@ -46,10 +46,12 @@ class ChatBox(QTextEdit):
         self.font = QFont()
         self.font.setFamily('Comic Sans MS')
         self.font.setPointSize(11)
+        self.setFont(self.font)
 
-        self.p_height = parent.height
+        self.scrollbar = self.verticalScrollBar()
+        self.scrollbar.setStyleSheet('width: 0px;')
+        self.scrollbar.setVisible(False)
 
-        self.setGeometry(parent.x-50, parent.height - 50, parent.width-20,35)
         self.setStyleSheet('''     
         border-radius: 15px;
         background-color: white;
@@ -59,31 +61,29 @@ class ChatBox(QTextEdit):
         ''')
 
         self.setPlaceholderText('Type message')
-        self.setFont(self.font)
+        self.setMaximumHeight(35)
         self.setObjectName('chat_box')
-        self.textChanged.connect(self.text)
-
-        self.last_height = 35
-
-        self.scrollbar = self.verticalScrollBar()
-        self.scrollbar.setStyleSheet('width: 0px;')
-        self.scrollbar.setVisible(False)
 
         self.send_button = QPushButton(self)
-        self.send_button.setGeometry(self.width() - 30, 5, 27, 25)
+        self.send_button.setGeometry(1170, 5, 27, 25)
         self.send_button.setObjectName('senderbud')
+
         self.send_icon = QtGui.QIcon()
         self.send_idle_icon = QtGui.QIcon()
         self.send_icon.addPixmap(QtGui.QPixmap("src/UI/assets/send.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.send_idle_icon.addPixmap(QtGui.QPixmap("src/UI/assets/send_idle.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        
         self.send_button.setIcon(self.send_idle_icon)
         self.send_button.setIconSize(QtCore.QSize(25, 25))     
-        self.send_button.clicked.connect(self.send_message)     
+        
+        self.send_button.clicked.connect(self.send_message)    
+        self.textChanged.connect(self.text)
+ 
 
-    def keyPressEvent(self, e: QKeyEvent) -> None:
-        if e.key() == Qt.Key.Key_Return or e.key() == Qt.Key_Enter:
-            return
-        return super().keyPressEvent(e)
+    # def keyPressEvent(self, e: QKeyEvent) -> None:
+    #     if e.key() == Qt.Key.Key_Return or e.key() == Qt.Key_Enter:
+    #         return
+    #     return super().keyPressEvent(e)
     
     def send_message(self):
         if len(self.toPlainText()):
@@ -117,37 +117,41 @@ class ChatBox(QTextEdit):
 
 
     def handle_height(self):
-        curr_height = self.height()
         height = int(self.document().size().height())
-        if height > 35:
-
-            self.setFixedHeight(height)
-            if height < self.last_height:
-                self.move(self.x(), self.y() + (curr_height - height))    
-            else:
-                self.move(self.x(), self.y() - (height - curr_height))
-            self.last_height = height
-
+        if height < 28:
+            self.setMaximumHeight(35)
         else:
-            self.setFixedHeight(35) 
-            self.move(self.x(), self.p_height - 50)
+            self.setMaximumHeight(height + 7)
+    def resize(self, width, height):
+        self.send_button.setGeometry(width-110, 5, 27, 25)
 
 class ChatUI():
-    def __init__(self, main_window) -> None:
+    def __init__(self, central_widget) -> None:
 
         self.chat_open = False
 
-        self.x = main_window.get_line_seperator()
-        self.y = 0
-        self.width = main_window.width - main_window.get_line_seperator()
-        self.height = main_window.height
+        self.layout = QVBoxLayout()
+        self.layout.setObjectName('chat_layout')
+        
+        self.chat_frame = QFrame(central_widget)
+        self.chat_frame.setFrameShape(QFrame.StyledPanel)
+        self.chat_frame.setFrameShadow(QFrame.Raised)
+        self.chat_frame.setStyleSheet('background-color: rgb(240, 240, 240);')
 
-        self.chat_frame = QFrame(main_window.central_widget)
-        self.chat_frame.setGeometry(self.x, self.y, self.width, self.height)
+        self.chat_layout = QVBoxLayout(self.chat_frame)
+        self.chat_layout.setObjectName('chat_layout')
 
-        self.chat_frame.setVisible(False)
+        self.layout.addWidget(self.chat_frame)
 
         self.chat_box = ChatBox(self)
+        self.chat_layout.addWidget(self.chat_box, 0, Qt.AlignBottom)
+
+    def resize_signal(self, width, height):
+        self.chat_box.handle_height()
+        self.chat_box.resize(width, height)
+
+    def get_layout(self):
+        return self.layout
 
     def open(self):
         self.chat_open = True
