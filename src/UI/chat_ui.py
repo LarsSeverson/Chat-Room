@@ -81,6 +81,10 @@ class ChatBox(QTextEdit):
  
     def keyPressEvent(self, e: QKeyEvent) -> None:
         if e.key() == Qt.Key.Key_Return or e.key() == Qt.Key_Enter:
+            if e.modifiers() == Qt.ShiftModifier:
+                return super().keyPressEvent(e)
+            
+            self.send_message()
             return
         return super().keyPressEvent(e)
     
