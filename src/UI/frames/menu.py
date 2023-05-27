@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from UI.menu_button import MenuButton
-from UI.chat_ui import ChatButton
-from UI.profile_ui import ProfileButton
+from UI.buttons.menu_button import MenuButton
+from UI.frames.chat_ui import ChatButton
+from UI.frames.profile_ui import ProfileButton
 
 class Menu:
     def __init__(self, central_widget) -> None:

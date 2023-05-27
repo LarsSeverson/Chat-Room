@@ -1,25 +1,25 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtWidgets import *
 from UI.buttons.button import *
-
-class ProfileButton(QtWidgets.QPushButton):
+class ChatButton(QtWidgets.QPushButton):
     def __init__(self, central_widget=None) -> None:
         super().__init__(central_widget)
 
-        self.type = Type.PROFILE
+        self.type = Type.CHAT
         self.is_open = False
         
         self.setEnabled(True)
-        self.setGeometry(0,110,51,51)
+        self.setGeometry(0,55,51,51)
         self.setAutoFillBackground(False)
         self.setStyleSheet(ButtonStyleSheets.default)
 
-        self.profile_icon = QtGui.QIcon()
-        self.profile_icon.addPixmap(QtGui.QPixmap("src/UI/assets/profile.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.chat_icon = QtGui.QIcon()
+        self.chat_icon.addPixmap(QtGui.QPixmap("src/UI/assets/chat.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
-        self.setIcon(self.profile_icon)
-        self.setIconSize(QtCore.QSize(35, 55))    
+        self.setIcon(self.chat_icon)
+        self.setIconSize(QtCore.QSize(35, 35))    
 
-        self.setObjectName('profile_button')
+        self.setObjectName('chat_button')
     
     def open(self):
         self.setStyleSheet('''
