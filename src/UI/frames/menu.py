@@ -1,18 +1,19 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+import modules
+
 from UI.buttons.menu_button import MenuButton
-from UI.frames.chat_ui import ChatButton
-from UI.frames.profile_ui import ProfileButton
+from UI.buttons.chat_button import ChatButton
+from UI.buttons.profile_button import ProfileButton
 
 class Menu:
     def __init__(self, central_widget) -> None:
         self.menu_buttons = []
         self.menu_is_open = False
 
-        self.left_frame = QtWidgets.QFrame(central_widget)
+        self.left_frame = modules.QtWidgets.QFrame(central_widget)
         self.left_frame.setMinimumSize(51, 0)
         self.left_frame.setMaximumSize(35, 16777215)
-        self.left_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.left_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.left_frame.setFrameShape(modules.QtWidgets.QFrame.StyledPanel)
+        self.left_frame.setFrameShadow(modules.QtWidgets.QFrame.Raised)
         self.left_frame.setStyleSheet("background-color: white;")
 
         self.menu_button = MenuButton(central_widget)
@@ -32,7 +33,7 @@ class Menu:
 
     def open_chat(self):
         for button in self.menu_buttons:
-            if button.type != self.chat_button.type:
+            if button != self.chat_button:
                 button.reset()
         if not self.chat_button.is_open:
             self.chat_button.open()
@@ -40,15 +41,15 @@ class Menu:
 
     def open_profile(self):
         for button in self.menu_buttons:
-            if button.type != self.profile_button.type:
+            if button != self.profile_button:
                 button.reset()
         if not self.profile_button.is_open:
             self.profile_button.open()
             self.profile_callback()
 
     def init_animations(self):
-        self.left_anim = QtCore.QPropertyAnimation(self.left_frame, b'minimumWidth')
-        self.menu_anim = QtCore.QPropertyAnimation(self.menu_button, b'pos')
+        self.left_anim = modules.QtCore.QPropertyAnimation(self.left_frame, b'minimumWidth')
+        self.menu_anim = modules.QtCore.QPropertyAnimation(self.menu_button, b'pos')
         self.left_anim.setDuration(150)
         self.menu_anim.setDuration(150)
         
@@ -62,7 +63,7 @@ class Menu:
         self.left_anim.setEndValue(100)
 
         self.menu_anim.setStartValue(self.menu_button.pos())
-        self.menu_anim.setEndValue(QtCore.QPoint(50, self.menu_button.y()))
+        self.menu_anim.setEndValue(modules.QtCore.QPoint(50, self.menu_button.y()))
         
         self.menu_button.setIcon(self.menu_button.menu_icon_open)        
         
@@ -77,7 +78,7 @@ class Menu:
         self.left_anim.setEndValue(51)
 
         self.menu_anim.setStartValue(self.menu_button.pos())
-        self.menu_anim.setEndValue(QtCore.QPoint(0, self.menu_button.y()))
+        self.menu_anim.setEndValue(modules.QtCore.QPoint(0, self.menu_button.y()))
        
         self.menu_button.setIcon(self.menu_button.menu_icon)
 

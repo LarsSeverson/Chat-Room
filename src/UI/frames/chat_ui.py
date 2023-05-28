@@ -1,14 +1,12 @@
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from UI.buttons.chat_button import ChatButton
+import modules
+from UI.components.chat_room_ui import ChatRoom
+from src.core.chat import ChatType
 
-class ChatBox(QTextEdit):
-    def __init__(self, parent):
-        super().__init__(parent.chat_frame)
+class ChatBox(modules.QTextEdit):
+    def __init__(self, frame):
+        super().__init__(frame)
 
-        self.font = QFont()
+        self.font = modules.QFont()
         self.font.setFamily('Comic Sans MS')
         self.font.setPointSize(11)
         self.setFont(self.font)
@@ -29,24 +27,24 @@ class ChatBox(QTextEdit):
         self.setMaximumHeight(35)
         self.setObjectName('chat_box')
 
-        self.send_button = QPushButton(self)
+        self.send_button = modules.QPushButton(self)
         self.send_button.setGeometry(1170, 5, 27, 25)
-        self.send_button.setObjectName('senderbud')
+        self.send_button.setObjectName('sender_bud')
 
-        self.send_icon = QtGui.QIcon()
-        self.send_idle_icon = QtGui.QIcon()
-        self.send_icon.addPixmap(QtGui.QPixmap("src/UI/assets/send.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.send_idle_icon.addPixmap(QtGui.QPixmap("src/UI/assets/send_idle.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.send_icon = modules.QtGui.QIcon()
+        self.send_idle_icon = modules.QtGui.QIcon()
+        self.send_icon.addPixmap(modules.QtGui.QPixmap("src/UI/assets/send.png"), modules.QtGui.QIcon.Normal, modules.QtGui.QIcon.Off)
+        self.send_idle_icon.addPixmap(modules.QtGui.QPixmap("src/UI/assets/send_idle.png"), modules.QtGui.QIcon.Normal, modules.QtGui.QIcon.Off)
         
         self.send_button.setIcon(self.send_idle_icon)
-        self.send_button.setIconSize(QtCore.QSize(25, 25))     
+        self.send_button.setIconSize(modules.QtCore.QSize(25, 25))     
         
         self.send_button.clicked.connect(self.send_message)    
         self.textChanged.connect(self.text)
  
-    def keyPressEvent(self, e: QKeyEvent) -> None:
-        if e.key() == Qt.Key.Key_Return or e.key() == Qt.Key_Enter:
-            if e.modifiers() == Qt.ShiftModifier:
+    def keyPressEvent(self, e: modules.QKeyEvent) -> None:
+        if e.key() == modules.Qt.Key.Key_Return or e.key() == modules.Qt.Key_Enter:
+            if e.modifiers() == modules.Qt.ShiftModifier:
                 return super().keyPressEvent(e)
             
             self.send_message()
@@ -55,7 +53,7 @@ class ChatBox(QTextEdit):
     
     def send_message(self):
         if len(self.toPlainText()):
-            print('msg')
+            self.send_callback(self.document())
 
             self.clear()
 
@@ -82,7 +80,8 @@ class ChatBox(QTextEdit):
                 background-color: rgb(229, 229, 229);
             }
             ''')  
-
+    def set_send_callback(self, func):
+        self.send_callback = func
 
     def handle_height(self):
         height = int(self.document().size().height())
@@ -90,6 +89,7 @@ class ChatBox(QTextEdit):
             self.setMaximumHeight(35)
         else:
             self.setMaximumHeight(height + 7)
+
     def resize(self, width, height):
         self.send_button.setGeometry(width-110, 5, 27, 25)
 
@@ -98,25 +98,33 @@ class ChatUI():
 
         self.chat_open = False
 
-        self.layout = QVBoxLayout()
+        self.layout = modules.QVBoxLayout()
         self.layout.setObjectName('chat_layout')
         
-        self.chat_frame = QFrame(central_widget)
-        self.chat_frame.setFrameShape(QFrame.StyledPanel)
-        self.chat_frame.setFrameShadow(QFrame.Raised)
+        self.chat_frame = modules.QFrame(central_widget)
+        self.chat_frame.setFrameShape(modules.QFrame.StyledPanel)
+        self.chat_frame.setFrameShadow(modules.QFrame.Raised)
         self.chat_frame.setStyleSheet('background-color: rgb(240, 240, 240);')
 
-        self.chat_layout = QVBoxLayout(self.chat_frame)
+        self.chat_layout = modules.QVBoxLayout(self.chat_frame)
         self.chat_layout.setObjectName('chat_layout')
 
         self.layout.addWidget(self.chat_frame)
 
-        self.chat_box = ChatBox(self)
-        self.chat_layout.addWidget(self.chat_box, 0, Qt.AlignBottom)
+        self.chat_room = ChatRoom(self.chat_frame)
+
+        self.chat_box = ChatBox(self.chat_frame)
+        self.chat_box.set_send_callback(self.send_txt_msg)
+
+        self.chat_layout.addWidget(self.chat_room, 0)
+        self.chat_layout.addWidget(self.chat_box, 0, modules.Qt.AlignBottom)
 
     def resize_signal(self, width, height):
         self.chat_box.handle_height()
         self.chat_box.resize(width, height)
+
+    def send_txt_msg(self, text: str):
+        self.chat_room.add_txt_msg(ChatType.SENDER, text)
 
     def get_layout(self):
         return self.layout

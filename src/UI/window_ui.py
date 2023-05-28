@@ -1,5 +1,4 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton
+import modules
 
 from UI.frames.menu import Menu
 from UI.frames.chat_ui import ChatUI
@@ -9,17 +8,17 @@ class WindowUI:
     def __init__(self, main_window):
         self.window = main_window
 
-        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        size_policy = modules.QtWidgets.QSizePolicy(modules.QtWidgets.QSizePolicy.Fixed, modules.QtWidgets.QSizePolicy.Preferred)
         size_policy.setHorizontalStretch(100)
         size_policy.setVerticalStretch(0)
         size_policy.setHeightForWidth(main_window.sizePolicy().hasHeightForWidth())
         main_window.setSizePolicy(size_policy)
 
-        self.central_widget = QWidget(main_window)
+        self.central_widget = modules.QWidget(main_window)
         self.central_widget.setObjectName('central_widget')
         self.central_widget.setStyleSheet('background-color: white;')
 
-        self.horizontal_layout = QHBoxLayout(self.central_widget)
+        self.horizontal_layout = modules.QHBoxLayout(self.central_widget)
         self.horizontal_layout.setContentsMargins(0,0,0,0)
         self.horizontal_layout.setSpacing(0)
         self.horizontal_layout.setObjectName('horizontal_layout')
@@ -35,7 +34,7 @@ class WindowUI:
         self.horizontal_layout.addLayout(self.chat.get_layout())
 
         main_window.setCentralWidget(self.central_widget)
-        QtCore.QMetaObject.connectSlotsByName(main_window)
+        modules.QtCore.QMetaObject.connectSlotsByName(main_window)
 
         self.menu.open_chat()
 

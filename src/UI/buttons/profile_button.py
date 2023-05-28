@@ -2,24 +2,24 @@ import modules
 
 from UI.buttons.button import *
 
-class ChatButton(modules.QtWidgets.QPushButton):
+class ProfileButton(modules.QtWidgets.QPushButton):
     def __init__(self, central_widget=None) -> None:
         super().__init__(central_widget)
 
         self.is_open = False
         
         self.setEnabled(True)
-        self.setGeometry(0,55,51,51)
+        self.setGeometry(0,110,51,51)
         self.setAutoFillBackground(False)
         self.setStyleSheet(ButtonStyleSheets.default)
 
-        self.chat_icon = modules.QtGui.QIcon()
-        self.chat_icon.addPixmap(modules.QtGui.QPixmap("src/UI/assets/chat.png"), modules.QtGui.QIcon.Normal, modules.QtGui.QIcon.Off)
+        self.profile_icon = modules.QtGui.QIcon()
+        self.profile_icon.addPixmap(modules.QtGui.QPixmap("src/UI/assets/profile.png"), modules.QtGui.QIcon.Normal, modules.QtGui.QIcon.Off)
 
-        self.setIcon(self.chat_icon)
-        self.setIconSize(modules.QtCore.QSize(35, 35))    
+        self.setIcon(self.profile_icon)
+        self.setIconSize(modules.QtCore.QSize(35, 55))    
 
-        self.setObjectName('chat_button')
+        self.setObjectName('profile_button')
     
     def open(self):
         self.setStyleSheet('''
