@@ -8,8 +8,8 @@ class NoScrollTextBrowser(modules.QTextBrowser):
     def __init__(self, parent = None) -> None:
         super().__init__(parent)
 
-        #self.setVerticalScrollBarPolicy(modules.Qt.ScrollBarAlwaysOff)
-        #self.setHorizontalScrollBarPolicy(modules.Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(modules.Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(modules.Qt.ScrollBarAlwaysOff)
         self.setReadOnly(True)
         self.setTextInteractionFlags(modules.Qt.TextSelectableByMouse)
         
@@ -28,7 +28,7 @@ class NoScrollTextBrowser(modules.QTextBrowser):
         }}
         """
         )
-        #self.setSizePolicy(modules.QSizePolicy.Preferred, modules.QSizePolicy.Fixed) 
+        self.setSizePolicy(modules.QSizePolicy.Preferred, modules.QSizePolicy.Fixed) 
         #self.setSizeAdjustPolicy(modules.QTextBrowser.AdjustToContents)
 
     def wheelEvent(self, e: modules.QWheelEvent) -> None:
