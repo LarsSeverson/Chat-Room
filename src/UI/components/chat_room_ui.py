@@ -1,4 +1,4 @@
-from PyQt5 import QtGui
+from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 
 import modules
@@ -8,42 +8,42 @@ class NoScrollTextBrowser(modules.QTextBrowser):
     def __init__(self, parent = None) -> None:
         super().__init__(parent)
 
-        self.setVerticalScrollBarPolicy(modules.Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(modules.Qt.ScrollBarAlwaysOff)
-
+        #self.setVerticalScrollBarPolicy(modules.Qt.ScrollBarAlwaysOff)
+        #self.setHorizontalScrollBarPolicy(modules.Qt.ScrollBarAlwaysOff)
         self.setReadOnly(True)
         self.setTextInteractionFlags(modules.Qt.TextSelectableByMouse)
-    
-    def set_margin(self, margin: int, width: int):
-        val = (width-60) - margin
-        if val < 700:
-            val = 700
-            
+        
         self.setStyleSheet(
-            f"""
-            QTextBrowser {{
-                border-radius: 10px;
-                margin-bottom: 10px;
-                margin-left: 20px; 
-                margin-right: 20px;
-            }}
+        f"""
+        QTextBrowser {{
+            border-radius: 10px;
+        }}
             
-            #sender_message {{
-                background-color: lightblue;
-                margin-left: {val}px;
-            }}
+        #sender_message {{
+            background-color: lightblue;
+        }}
             
-            #other_message {{
-                background-color: white;
-                margin-right: {val}px;
-            }}
-            """
+        #other_message {{
+            background-color: white;
+        }}
+        """
         )
-
+        #self.setSizePolicy(modules.QSizePolicy.Preferred, modules.QSizePolicy.Fixed) 
+        #self.setSizeAdjustPolicy(modules.QTextBrowser.AdjustToContents)
 
     def wheelEvent(self, e: modules.QWheelEvent) -> None:
         e.ignore()
 
+    def setDocument(self, document: modules.QTextDocument) -> None:
+        super().setDocument(document)
+    
+    def resizeEvent(self, a0: modules.QResizeEvent) -> None:
+        super().resizeEvent(a0)
+        
+        doc_size = self.document().size().toSize()
+        print(doc_size.width(), doc_size.height())
+
+        self.setFixedHeight(doc_size.height())
 
 class ChatRoom(modules.QScrollArea):
     def __init__(self, frame=None):
@@ -51,35 +51,31 @@ class ChatRoom(modules.QScrollArea):
 
         self.contents = modules.QWidget()
 
+        self.num_msgs = 0
+
         self.layout = modules.QVBoxLayout(self.contents)
 
+        self.padding = modules.QSpacerItem(20,40,modules.QSizePolicy.Minimum, modules.QSizePolicy.Expanding)
+
+        self.layout.addItem(self.padding)
+
+        self.setStyleSheet('border: none;')
         self.setWidgetResizable(True)
         self.setWidget(self.contents)
         self.setObjectName('chat_room')
 
     def add_txt_msg(self, type: ChatType, document: modules.QTextDocument):
         msg = NoScrollTextBrowser()
-
         msg.setDocument(document.clone())
 
-        text_size = msg.document().size().toSize()
-        font_metrics = QtGui.QFontMetrics(msg.font())
-        text_width = font_metrics.width(msg.toPlainText())
-    
-        msg.set_margin(text_width, self.width())
-
-        msg.setFixedHeight(text_size.height() + 10)
-        msg.setMaximumWidth(self.width()-25)
-
-        
         if type == ChatType.SENDER:
             msg.setObjectName('sender_message')
+            self.layout.addWidget(msg, 0, modules.Qt.AlignRight | modules.Qt.AlignBottom)
         else:
             msg.setObjectName('other_message')
-
-
-        self.layout.addWidget(msg)
-        self.layout.setAlignment(modules.Qt.AlignBottom)
-
+            self.layout.addWidget(msg, 0, modules.Qt.AlignLeft | modules.Qt.AlignBottom)
+        
+        self.num_msgs += 1
+        print(msg.hasHeightForWidth())
     
 

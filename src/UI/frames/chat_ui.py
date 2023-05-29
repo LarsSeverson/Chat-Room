@@ -123,6 +123,7 @@ class ChatUI():
         self.chat_box.handle_height()
         self.chat_box.resize(width, height)
 
+
     def send_txt_msg(self, text: str):
         self.chat_room.add_txt_msg(ChatType.SENDER, text)
 
