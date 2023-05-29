@@ -41,9 +41,11 @@ class NoScrollTextBrowser(modules.QTextBrowser):
         super().resizeEvent(a0)
         
         doc_size = self.document().size().toSize()
-        print(doc_size.width(), doc_size.height())
+
+        print(self.document().size().width())
 
         self.setFixedHeight(doc_size.height())
+        self.setFixedWidth(doc_size.width())
 
 class ChatRoom(modules.QScrollArea):
     def __init__(self, frame=None):
@@ -76,6 +78,5 @@ class ChatRoom(modules.QScrollArea):
             self.layout.addWidget(msg, 0, modules.Qt.AlignLeft | modules.Qt.AlignBottom)
         
         self.num_msgs += 1
-        print(msg.hasHeightForWidth())
     
 

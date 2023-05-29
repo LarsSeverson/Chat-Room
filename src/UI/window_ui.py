@@ -27,6 +27,7 @@ class WindowUI:
 
         self.menu.set_chat_callback(self.open_chat)
         self.menu.set_profile_callback(self.open_profile)
+        self.menu.set_menu_open_signal(self.resize_signal)
 
         self.chat = ChatUI(self.central_widget)
 

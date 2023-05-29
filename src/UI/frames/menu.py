@@ -94,3 +94,5 @@ class Menu:
         self.chat_callback = func
     def set_profile_callback(self, func):
         self.profile_callback = func
+    def set_menu_open_signal(self, func):
+        self.open_signal = func
