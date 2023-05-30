@@ -5,7 +5,9 @@ import sys
 class Application:
     def __init__(self) -> None:
         self.app = QApplication(sys.argv)
-        self.window = Window()    
+        self.window = Window()   
+        self.window.connect_chat()
+
     def run(self):
         self.window.show()
         sys.exit(self.app.exec_())

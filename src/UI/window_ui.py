@@ -46,3 +46,7 @@ class WindowUI:
         self.chat.close()
     def resize_signal(self, width, height):
         self.chat.resize_signal(width, height)
+    
+    def set_text_callback(self, func):
+        self.chat.set_text_callback(func)
+    

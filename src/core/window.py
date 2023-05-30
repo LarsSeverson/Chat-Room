@@ -2,6 +2,8 @@ import modules
 
 from UI.window_ui import WindowUI
 
+from src.core.chat import Chat
+
 
 class Window(modules.QMainWindow):
     def __init__(self) -> None:
@@ -11,15 +13,14 @@ class Window(modules.QMainWindow):
         self.setWindowIcon(modules.QtGui.QIcon('src/UI/assets/icon.png'))
         self.setAnimated(True)
 
-        self.setup_ui()
-        
+        self.init_ui()
 
-    def setup_ui(self):
-        print(self.width)
+    def init_ui(self):
         self.ui = WindowUI(self)
-    
-    def button_event(self, type):
-        pass
+
+    def connect_chat(self):
+        self.chat = Chat()
+        self.ui.set_text_callback(self.chat.text_message)
     
     def resizeEvent(self, event) -> None:
         self.ui.resize_signal(self.width(), self.height())

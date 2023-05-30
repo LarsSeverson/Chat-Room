@@ -17,6 +17,7 @@ class NoScrollTextBrowser(modules.QTextBrowser):
         f"""
         QTextBrowser {{
             border-radius: 10px;
+            padding: 2px;
         }}
             
         #sender_message {{
@@ -36,16 +37,32 @@ class NoScrollTextBrowser(modules.QTextBrowser):
 
     def setDocument(self, document: modules.QTextDocument) -> None:
         super().setDocument(document)
+
+        font_metrix = modules.QFontMetrics(self.font())
+        text_width = font_metrix.width(self.toPlainText())
+
+        '''
+        Lots of resizing happening here, but it's necessary to get the correct sizings.
+        Since the source document has a different sizing, it will give incorrect dimensions
+        to this text browser. We have to do resizings to get the size according to this objects
+        original dimensions.
+        '''
+        if text_width < 600:
+            self.setWordWrapMode(False)
+            self.setMinimumWidth(text_width+10)
+            self.setMaximumWidth(text_width+10)
+        elif text_width >= 600:
+            self.setMinimumWidth(600)
+            self.setMaximumWidth(600)
+        
     
     def resizeEvent(self, a0: modules.QResizeEvent) -> None:
         super().resizeEvent(a0)
         
         doc_size = self.document().size().toSize()
 
-        print(self.document().size().width())
-
         self.setFixedHeight(doc_size.height())
-        self.setFixedWidth(doc_size.width())
+        self.setFixedWidth(doc_size.width()+10)
 
 class ChatRoom(modules.QScrollArea):
     def __init__(self, frame=None):
