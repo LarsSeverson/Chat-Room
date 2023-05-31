@@ -1,4 +1,4 @@
-from modules import socket, select
+from modules import socket, select, multiprocessing
 
 HEADER_LENGTH = 10
 
@@ -9,16 +9,17 @@ class ChatServer:
     def __init__(self) -> None:
         
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
         self.socket.bind((IP, PORT))
-
         self.socket.listen()
+
+        self.socket.setblocking(False)
 
         self.sockets_list = [self.socket]
         self.clients = {}
-        self.is_running = True
+
+        self.is_running = multiprocessing.Event()
+        self.is_running.set()
 
         print(f'LOG: Listening for connections on {IP}: {PORT}...')
 
@@ -36,9 +37,8 @@ class ChatServer:
             return False
         
     def run(self):
-        while self.is_running:
-
-            read_sockets, _, exception_sockets = select.select(self.sockets_list, [], self.sockets_list)
+        while self.is_running.is_set():
+            read_sockets, _, exception_sockets = select.select(self.sockets_list, [], self.sockets_list, 0)
 
             for notif_socket in read_sockets:
                 if notif_socket == self.socket:
@@ -78,4 +78,8 @@ class ChatServer:
 
             for notif_socket in exception_sockets:
                 self.sockets_list.remove(notif_socket)
-                del self.clients[notif_socket]       
+                del self.clients[notif_socket]
+                
+    def close(self):
+        self.is_running.clear()
+        self.socket.close()

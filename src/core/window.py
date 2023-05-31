@@ -1,3 +1,4 @@
+from PyQt5 import QtGui
 import modules
 
 from UI.window_ui import WindowUI
@@ -24,3 +25,10 @@ class Window(modules.QMainWindow):
     def resizeEvent(self, event) -> None:
         self.ui.resize_signal(self.width(), self.height())
         return super().resizeEvent(event)
+    
+    def set_close(self, func):
+        self.close = func
+    
+    def closeEvent(self, a0: modules.QCloseEvent) -> None:
+        self.close()
+        return super().closeEvent(a0)
