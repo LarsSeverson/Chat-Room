@@ -7,3 +7,9 @@ Chat_Room.egg-info/top_level.txt
 src/__init__.py
 src/main.py
 src/modules.py
+src/core/__init__.py
+src/core/application.py
+src/core/chat.py
+src/core/client.py
+src/core/server.py
+src/core/window.py

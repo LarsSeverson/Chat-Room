@@ -18,9 +18,8 @@ class Window(modules.QMainWindow):
     def init_ui(self):
         self.ui = WindowUI(self)
 
-    def connect_chat(self):
-        self.chat = Chat()
-        self.ui.set_text_callback(self.chat.text_message)
+    def set_text_callback(self, func):
+        self.ui.set_text_callback(func)
     
     def resizeEvent(self, event) -> None:
         self.ui.resize_signal(self.width(), self.height())

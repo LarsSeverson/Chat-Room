@@ -1,5 +1,6 @@
 from PyQt5 import QtGui
 import modules
+
 from UI.components.chat_room_ui import ChatRoom
 from UI.components.chat_box_ui import ChatBox
 
