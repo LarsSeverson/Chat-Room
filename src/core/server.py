@@ -13,13 +13,11 @@ class ChatServer:
         self.socket.bind((IP, PORT))
         self.socket.listen()
 
-        self.socket.setblocking(False)
 
         self.sockets_list = [self.socket]
         self.clients = {}
 
-        self.is_running = multiprocessing.Event()
-        self.is_running.set()
+        self.server_active = True
 
         print(f'LOG: Listening for connections on {IP}: {PORT}...')
 
@@ -37,8 +35,8 @@ class ChatServer:
             return False
         
     def run(self):
-        while self.is_running.is_set():
-            read_sockets, _, exception_sockets = select.select(self.sockets_list, [], self.sockets_list, 0)
+        while self.server_active:
+            read_sockets, _, exception_sockets = select.select(self.sockets_list, [], self.sockets_list)
 
             for notif_socket in read_sockets:
                 if notif_socket == self.socket:
@@ -58,7 +56,7 @@ class ChatServer:
                     # new message
                     message = self.msg_receive(notif_socket)
 
-                    if not message:
+                    if message is False:
                         # client disconnected
                         print('LOG: User disconnected from: {}'.format(self.clients[notif_socket]['data'].decode('utf-8')))
 
@@ -79,7 +77,7 @@ class ChatServer:
             for notif_socket in exception_sockets:
                 self.sockets_list.remove(notif_socket)
                 del self.clients[notif_socket]
-                
+
     def close(self):
-        self.is_running.clear()
+        self.server_active = False
         self.socket.close()
