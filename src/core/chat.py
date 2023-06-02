@@ -21,6 +21,7 @@ class Chat:
             self.server_thread.start()
 
         self.client = ChatClient(PORT=room_id)
+        self.client.set_outbound_callback(self.msg_outbound)
 
         self.client_thread = threading.Thread(target=self.client.listen)
         self.client_thread.start()
@@ -34,7 +35,10 @@ class Chat:
             self.server.close()
             self.server_thread.join()
 
-    def en_queue(self, text):
+    def msg_inbound(self, text):
         #self.msg_buf.append(text)
 
         self.client.msg = text
+
+    def msg_outbound(self, text):
+        print(text)

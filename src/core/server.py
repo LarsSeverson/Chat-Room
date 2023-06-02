@@ -21,6 +21,14 @@ class ChatServer:
 
         print(f'LOG: Listening for connections on {IP}: {PORT}...')
 
+    def broadcast(self, notif_socket, message):
+        user = self.clients[notif_socket]
+        print(f'LOG: Received message from {user["data"].decode("utf-8")}: {message["data"].decode("utf-8")}')
+
+        for client_socket in self.clients:
+            if client_socket != notif_socket:
+                client_socket.send(user['header'] + user['data'] + message['header'] + message['data'])
+
     def msg_receive(self, client_socket):
         try:
             message_header = client_socket.recv(HEADER_LENGTH)
@@ -65,14 +73,8 @@ class ChatServer:
                         del self.clients[notif_socket]
 
                         continue
-
-                    user = self.clients[notif_socket]
-
-                    print(f'LOG: Received message from {user["data"].decode("utf-8")}: {message["data"].decode("utf-8")}')
-
-                    for client_socket in self.clients:
-                        if client_socket != notif_socket:
-                            client_socket.send(user['header'] + user['data'] + message['header'] + message['data'])
+                    
+                    self.broadcast(notif_socket, message)
 
             for notif_socket in exception_sockets:
                 self.sockets_list.remove(notif_socket)
