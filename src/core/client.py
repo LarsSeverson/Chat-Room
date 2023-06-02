@@ -19,6 +19,9 @@ class ChatClient:
 
         self.socket.send(self.username_header + self.username)
 
+    def set_outbound_callback(self, func):
+        self.send_outbound = func
+
     def listen(self):
         while self.client_active:
             message = self.msg
@@ -34,6 +37,7 @@ class ChatClient:
 
                     if not username_header:
                         print('Connection closed')
+                        self.close()
 
                     username_length = int(username_header.decode('utf-8').strip())
                     username = self.socket.recv(username_length).decode('utf-8')
@@ -42,7 +46,7 @@ class ChatClient:
                     message_length = int(message_header.decode('utf-8').strip())
                     message = self.socket.recv(message_length).decode('utf-8')
 
-                    print(f'{message}')
+                    self.send_outbound(message)
             except IOError as e:
                 if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
                     print('LOG: Reading error: '.format(str(e)))

@@ -10,7 +10,7 @@ class Application:
         self.window = Window()
         self.chat = Chat()
 
-        self.window.set_text_callback(self.chat.en_queue)
+        self.window.set_text_callback(self.chat.msg_inbound)
         self.window.set_close(self.stop)
 
     def start_chat(self):
