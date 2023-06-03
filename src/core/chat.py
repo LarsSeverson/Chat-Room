@@ -21,7 +21,7 @@ class Chat:
             self.server_thread.start()
 
         self.client = ChatClient(PORT=room_id)
-        self.client.set_outbound_callback(self.msg_outbound)
+        self.client.set_msg_send_callback(self.send_txt_msg)
 
         self.client_thread = threading.Thread(target=self.client.listen)
         self.client_thread.start()
@@ -35,10 +35,16 @@ class Chat:
             self.server.close()
             self.server_thread.join()
 
-    def msg_inbound(self, text):
+    def receive_txt_msg(self, text):
         #self.msg_buf.append(text)
-
         self.client.msg = text
 
-    def msg_outbound(self, text):
-        print(text)
+    def send_txt_msg(self, text):
+        self.msg_send_pipe.send(text)
+        self.send_callback()
+    
+    def set_send_callback(self, func):
+        self.send_callback = func
+
+    def set_msg_send_pipe(self, pipe):
+        self.msg_send_pipe = pipe

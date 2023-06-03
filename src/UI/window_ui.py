@@ -41,10 +41,13 @@ class WindowUI:
 
     def open_chat(self):
         self.chat.open()
+
+    def hey(self, text):
+        print(text)
     
     def open_profile(self):
         self.chat.close()
-        
+
     def resize_signal(self, width, height):
         self.chat.resize_signal(width, height)
 

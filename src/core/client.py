@@ -19,8 +19,8 @@ class ChatClient:
 
         self.socket.send(self.username_header + self.username)
 
-    def set_outbound_callback(self, func):
-        self.send_outbound = func
+    def set_msg_send_callback(self, func):
+        self.send_callback = func
 
     def listen(self):
         while self.client_active:
@@ -46,7 +46,7 @@ class ChatClient:
                     message_length = int(message_header.decode('utf-8').strip())
                     message = self.socket.recv(message_length).decode('utf-8')
 
-                    self.send_outbound(message)
+                    self.send_callback(message)
             except IOError as e:
                 if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
                     print('LOG: Reading error: '.format(str(e)))

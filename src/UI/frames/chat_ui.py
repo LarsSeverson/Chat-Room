@@ -40,9 +40,16 @@ class ChatUI(modules.QFrame):
         self.chat_box.handle_height()
         #self.chat_box.resize(width, height)
 
-    def send_txt_msg(self, text):
-        self.chat_room.add_txt_msg(ChatType.SENDER, text)
-        self.text_callback(text.toPlainText())
+    def send_txt_msg(self, document):
+        self.chat_room.add_txt_msg(ChatType.SENDER, document=document)
+        self.text_callback(document.toPlainText())
+
+    def receive_text_msg(self, pipe):
+        text = self.msg_receive_pipe.recv()
+        self.chat_room.add_txt_msg(ChatType.RECEIVER, document=self.chat_box.document(), text=text)
+
+    def set_msg_receive_pipe(self, pipe):
+        self.msg_receive_pipe = pipe
 
     def get_layout(self):
         return self.layout

@@ -54,7 +54,6 @@ class NoScrollTextBrowser(modules.QTextBrowser):
         elif text_width >= 600:
             self.setMinimumWidth(600)
             self.setMaximumWidth(600)
-        
     
     def resizeEvent(self, a0: modules.QResizeEvent) -> None:
         super().resizeEvent(a0)
@@ -83,9 +82,12 @@ class ChatRoom(modules.QScrollArea):
         self.setWidget(self.contents)
         self.setObjectName('chat_room')
 
-    def add_txt_msg(self, type: ChatType, document: modules.QTextDocument):
+    def add_txt_msg(self, type: ChatType, document: modules.QTextDocument, text: str = ''):
         msg = NoScrollTextBrowser()
         msg.setDocument(document.clone())
+
+        # if text:
+        #     ...#msg.setText(text)
 
         if type == ChatType.SENDER:
             msg.setObjectName('sender_message')
