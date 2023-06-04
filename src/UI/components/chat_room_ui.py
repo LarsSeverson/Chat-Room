@@ -86,8 +86,8 @@ class ChatRoom(modules.QScrollArea):
         msg = NoScrollTextBrowser()
         msg.setDocument(document.clone())
 
-        # if text:
-        #     ...#msg.setText(text)
+        if text:
+            msg.setText(text)
 
         if type == ChatType.SENDER:
             msg.setObjectName('sender_message')

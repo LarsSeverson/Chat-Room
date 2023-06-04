@@ -40,11 +40,7 @@ class Chat:
         self.client.msg = text
 
     def send_txt_msg(self, text):
-        self.msg_send_pipe.send(text)
-        self.send_callback()
+        self.send_callback(text)
     
     def set_send_callback(self, func):
         self.send_callback = func
-
-    def set_msg_send_pipe(self, pipe):
-        self.msg_send_pipe = pipe

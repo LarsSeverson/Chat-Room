@@ -1,4 +1,3 @@
-from PyQt5 import QtGui
 import modules
 
 from UI.components.chat_room_ui import ChatRoom
@@ -7,6 +6,9 @@ from UI.components.chat_box_ui import ChatBox
 from src.core.chat import ChatType
 
 class ChatUI(modules.QFrame):
+
+    message_received = modules.pyqtSignal(str)
+
     def __init__(self, central_widget) -> None:
         super().__init__(central_widget)
 
@@ -42,14 +44,10 @@ class ChatUI(modules.QFrame):
 
     def send_txt_msg(self, document):
         self.chat_room.add_txt_msg(ChatType.SENDER, document=document)
-        self.text_callback(document.toPlainText())
+        self.send_callback(document.toPlainText())
 
-    def receive_text_msg(self, pipe):
-        text = self.msg_receive_pipe.recv()
+    def receive_txt_msg(self, text: str):
         self.chat_room.add_txt_msg(ChatType.RECEIVER, document=self.chat_box.document(), text=text)
-
-    def set_msg_receive_pipe(self, pipe):
-        self.msg_receive_pipe = pipe
 
     def get_layout(self):
         return self.layout
@@ -62,5 +60,5 @@ class ChatUI(modules.QFrame):
         self.chat_open = False
         self.setVisible(False)
 
-    def set_text_callback(self, func):
-        self.text_callback = func
+    def set_send_callback(self, func):
+        self.send_callback = func

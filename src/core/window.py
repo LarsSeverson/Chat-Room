@@ -18,10 +18,7 @@ class Window(modules.QMainWindow):
 
     def init_ui(self):
         self.ui = WindowUI(self)
-
-    def set_msg_receive_pipe(self, pipe):
-        self.ui.chat.set_msg_receive_pipe(pipe)
-
+        
     def set_text_callback(self, func):
         self.ui.set_text_callback(func)
     

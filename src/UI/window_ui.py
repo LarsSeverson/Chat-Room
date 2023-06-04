@@ -30,6 +30,7 @@ class WindowUI:
         self.menu.set_menu_open_signal(self.resize_signal)
 
         self.chat = ChatUI(self.central_widget)
+        self.chat.message_received.connect(self.chat.receive_txt_msg)
 
         self.horizontal_layout.addWidget(self.menu.get_frame())
         self.horizontal_layout.addLayout(self.chat.get_layout())
@@ -42,9 +43,6 @@ class WindowUI:
     def open_chat(self):
         self.chat.open()
 
-    def hey(self, text):
-        print(text)
-    
     def open_profile(self):
         self.chat.close()
 
@@ -52,5 +50,5 @@ class WindowUI:
         self.chat.resize_signal(width, height)
 
     def set_text_callback(self, func):
-        self.chat.set_text_callback(func)
+        self.chat.set_send_callback(func)
     
