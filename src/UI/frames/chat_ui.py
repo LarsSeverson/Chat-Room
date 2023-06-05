@@ -17,6 +17,9 @@ class ChatUI(modules.QFrame):
         self.layout = modules.QVBoxLayout()
         self.layout.setObjectName('chat_layout')
 
+        self.option_layout = modules.QGridLayout()
+        self.option_layout.setObjectName('option_layout')
+
         self.setFrameShape(modules.QFrame.StyledPanel)
         self.setFrameShadow(modules.QFrame.Raised)
         self.setStyleSheet('background-color: rgb(240, 240, 240);')

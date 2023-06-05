@@ -3,6 +3,15 @@ from modules import QApplication, sys, multiprocessing
 from core.window import Window
 from core.chat import Chat
 
+'''
+
+                                     Application
+                                     /        \
+ sends and receives from frontend - /          \ - sends and receives messages to / from backend
+                                   /            \
+                            Backend Chat       UI Chat
+'''
+
 class Application:
     def __init__(self) -> None:
         self.app = QApplication(sys.argv)
