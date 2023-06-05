@@ -4,21 +4,33 @@ from UI.buttons.create_room_button import CreateRoomButton
 from UI.buttons.join_room_button import JoinRoomButton
 
 class ChatOptionFrame(modules.QFrame):
+
     def __init__(self, parent = None) -> None:
         super().__init__(parent)
 
-        self.layout = modules.QVBoxLayout()
+        self.layout = modules.QGridLayout(self)
+
+        self.font = modules.QFont()
+        self.font.setFamily('Comic Sans MS')
+        self.font.setPointSize(11)
 
         self.create_room = CreateRoomButton()
         self.join_room = JoinRoomButton()
-
         self._or = modules.QLabel()
-        self._or.setMaximumHeight(10)
+
+        self.create_room.setFont(self.font)
+        self.join_room.setFont(self.font)
+        self._or.setFont(self.font)
+
+        self.create_room.setText('Create Room')
+        self.join_room.setText('Join Room')
+
+        self._or.setMaximumHeight(12)
         self._or.setText('or')
 
-        self.layout.addWidget(self.create_room)
-        self.layout.addWidget(self._or)
-        self.layout.addWidget(self.join_room)
+        self.layout.addWidget(self.create_room, 1, 0, 1, 1)
+        self.layout.addWidget(self._or, 2, 0, 1, 1, modules.Qt.AlignHCenter)
+        self.layout.addWidget(self.join_room, 3, 0, 1, 1)
 
         self.setStyleSheet('''
         background-color: white;
