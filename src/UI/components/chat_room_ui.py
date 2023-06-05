@@ -82,6 +82,8 @@ class ChatRoom(modules.QScrollArea):
         self.setWidget(self.contents)
         self.setObjectName('chat_room')
 
+        self.setVisible(False)
+
     def add_txt_msg(self, type: ChatType, document: modules.QTextDocument, text: str = ''):
         msg = NoScrollTextBrowser()
         msg.setDocument(document.clone())

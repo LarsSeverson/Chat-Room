@@ -2,6 +2,7 @@ import modules
 
 from UI.components.chat_room_ui import ChatRoom
 from UI.components.chat_box_ui import ChatBox
+from UI.components.chat_option import ChatOption
 
 from src.core.chat import ChatType
 
@@ -14,20 +15,14 @@ class ChatUI(modules.QFrame):
 
         self.chat_open = False
 
-        self.layout = modules.QVBoxLayout()
-        self.layout.setObjectName('chat_layout')
-
-        self.option_layout = modules.QGridLayout()
-        self.option_layout.setObjectName('option_layout')
-
         self.setFrameShape(modules.QFrame.StyledPanel)
         self.setFrameShadow(modules.QFrame.Raised)
         self.setStyleSheet('background-color: rgb(240, 240, 240);')
 
-        self.chat_layout = modules.QVBoxLayout(self)
+        self.chat_layout = modules.QVBoxLayout()
         self.chat_layout.setObjectName('chat_layout')
 
-        self.layout.addWidget(self)
+        self.chat_option = ChatOption()
 
         self.chat_room = ChatRoom(self)
 
@@ -36,6 +31,8 @@ class ChatUI(modules.QFrame):
 
         self.chat_layout.addWidget(self.chat_room, 0)
         self.chat_layout.addWidget(self.chat_box, 0, modules.Qt.AlignBottom)
+
+        self.setLayout(self.chat_option)
 
     def resizeEvent(self, a0: modules.QResizeEvent) -> None:
         super().resizeEvent(a0)
@@ -51,9 +48,6 @@ class ChatUI(modules.QFrame):
 
     def receive_txt_msg(self, text: str):
         self.chat_room.add_txt_msg(ChatType.RECEIVER, document=self.chat_box.document(), text=text)
-
-    def get_layout(self):
-        return self.layout
 
     def open(self):
         self.chat_open = True

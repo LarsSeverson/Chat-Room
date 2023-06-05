@@ -33,7 +33,7 @@ class WindowUI:
         self.chat.message_received.connect(self.chat.receive_txt_msg)
 
         self.horizontal_layout.addWidget(self.menu.get_frame())
-        self.horizontal_layout.addLayout(self.chat.get_layout())
+        self.horizontal_layout.addWidget(self.chat)
 
         main_window.setCentralWidget(self.central_widget)
         modules.QtCore.QMetaObject.connectSlotsByName(main_window)

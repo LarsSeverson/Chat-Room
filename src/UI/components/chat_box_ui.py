@@ -38,6 +38,8 @@ class ChatBox(modules.QTextEdit):
         
         self.send_button.clicked.connect(self.send_message)    
         self.textChanged.connect(self.text)
+
+        self.setVisible(False)
  
     def keyPressEvent(self, e: modules.QKeyEvent) -> None:
         if e.key() == modules.Qt.Key.Key_Return or e.key() == modules.Qt.Key_Enter:
