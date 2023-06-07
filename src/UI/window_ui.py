@@ -41,7 +41,7 @@ class WindowUI:
         self.menu.open_chat()
 
     def open_chat(self):
-        self.chat.open()
+        self.chat.open_chat()
 
     def open_profile(self):
         self.chat.close()

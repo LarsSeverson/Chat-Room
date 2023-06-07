@@ -19,6 +19,8 @@ class Application:
         self.window = Window()
         self.chat = Chat()
 
+        self.chat_running = False
+
         self.window.set_text_callback(self.chat.receive_txt_msg)
         self.window.set_close(self.stop)
 
@@ -27,15 +29,17 @@ class Application:
     def start_chat(self):
         self.chat_process = multiprocessing.Process(target=self.chat.create_room(host=True))
         self.chat_process.start()
+        self.chat_running = True
 
     def backend_chat_send_msg(self, message):
         self.window.ui.chat.message_received.emit(message)
 
     def run(self):
         self.window.show()
-        self.start_chat()
         sys.exit(self.app.exec_())
     
     def stop(self):
-        self.chat.quit_room()
-        self.chat_process.join()
+        if self.chat_running:
+            self.chat.quit_room()
+            self.chat_process.join()
+        self.chat_running = False

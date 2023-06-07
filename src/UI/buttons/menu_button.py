@@ -6,7 +6,6 @@ class MenuButton(modules.QtWidgets.QPushButton):
     def __init__(self, central_widget=None) -> None:
         super().__init__(central_widget)
 
-        
         self.setEnabled(True)
         self.setGeometry(0,0,51,51)
         self.setAutoFillBackground(False)
@@ -16,6 +15,8 @@ class MenuButton(modules.QtWidgets.QPushButton):
         self.menu_icon_open = modules.QtGui.QIcon()
         self.menu_icon.addPixmap(modules.QtGui.QPixmap("src/UI/assets/menu_icon.png"), modules.QtGui.QIcon.Normal, modules.QtGui.QIcon.Off)
         self.menu_icon_open.addPixmap(modules.QtGui.QPixmap("src/UI/assets/menu_icon_open.png"), modules.QtGui.QIcon.Normal, modules.QtGui.QIcon.Off)
+
+        self.setCursor(modules.QCursor(modules.Qt.PointingHandCursor))
 
         self.setIcon(self.menu_icon)
         self.setIconSize(modules.QtCore.QSize(35, 35))    

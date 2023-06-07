@@ -1,7 +1,7 @@
 import modules
 
-from UI.components.chat_room_ui import ChatRoom
-from UI.components.chat_box_ui import ChatBox
+from UI.components.chat_room import ChatRoom
+from UI.components.chat_box import ChatBox
 from UI.components.chat_option import ChatOption
 
 from src.core.chat import ChatType
@@ -23,6 +23,7 @@ class ChatUI(modules.QFrame):
         self.chat_layout.setObjectName('chat_layout')
 
         self.chat_option = ChatOption()
+        #self.chat_option.option_frame.form_frame.create_frame.create_room_button.clicked.connect(self.open_)
 
         self.chat_room = ChatRoom(self)
 
@@ -49,9 +50,13 @@ class ChatUI(modules.QFrame):
     def receive_txt_msg(self, text: str):
         self.chat_room.add_txt_msg(ChatType.RECEIVER, document=self.chat_box.document(), text=text)
 
-    def open(self):
+    def open_chat(self):
         self.chat_open = True
+        #self.setLayout(self.chat_layout)
         self.setVisible(True)
+
+    def open_option(self):
+        self.setLayout(self.chat_option)
 
     def close(self):
         self.chat_open = False

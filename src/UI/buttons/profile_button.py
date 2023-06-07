@@ -16,6 +16,8 @@ class ProfileButton(modules.QtWidgets.QPushButton):
         self.profile_icon = modules.QtGui.QIcon()
         self.profile_icon.addPixmap(modules.QtGui.QPixmap("src/UI/assets/profile.png"), modules.QtGui.QIcon.Normal, modules.QtGui.QIcon.Off)
 
+        self.setCursor(modules.QCursor(modules.Qt.PointingHandCursor))
+
         self.setIcon(self.profile_icon)
         self.setIconSize(modules.QtCore.QSize(35, 55))    
 
