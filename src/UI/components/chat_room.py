@@ -8,6 +8,8 @@ class ChatRoom(modules.QScrollArea):
     def __init__(self, frame=None):
         super().__init__(frame)
 
+        self.scrollarea = modules.QScrollArea()
+
         self.contents = modules.QWidget()
 
         self.num_msgs = 0

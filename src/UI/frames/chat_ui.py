@@ -11,7 +11,7 @@ class ChatUI(modules.QFrame):
     message_received = modules.pyqtSignal(str)
 
     def __init__(self, central_widget) -> None:
-        super().__init__(central_widget)
+        super().__init__()
 
         self.chat_open = False
 
@@ -19,21 +19,35 @@ class ChatUI(modules.QFrame):
         self.setFrameShadow(modules.QFrame.Raised)
         self.setStyleSheet('background-color: rgb(240, 240, 240);')
 
-        self.chat_layout = modules.QVBoxLayout()
-        self.chat_layout.setObjectName('chat_layout')
-
-        self.chat_option = ChatOption()
-        #self.chat_option.option_frame.form_frame.create_frame.create_room_button.clicked.connect(self.open_)
-
         self.chat_room = ChatRoom(self)
-
         self.chat_box = ChatBox(self)
         self.chat_box.set_send_callback(self.send_txt_msg)
 
+        self.layout_stack = modules.QStackedLayout()
+
+        self.create_option_layout()
+        self.create_chat_layout()
+
+        self.layout_stack.setCurrentIndex(0)
+        self.setLayout(self.layout_stack)
+
+    def create_option_layout(self):
+        self.chat_option = ChatOption()
+        self.chat_option.option_frame.form_frame.create_frame.create_room_button.clicked.connect(self.open_chat)
+
+        # dummy widget which is necessary for the layout stack
+        widget = modules.QWidget()
+        widget.setLayout(self.chat_option)
+        self.layout_stack.addWidget(widget)
+
+    def create_chat_layout(self):
+        self.chat_layout = modules.QVBoxLayout()
         self.chat_layout.addWidget(self.chat_room, 0)
         self.chat_layout.addWidget(self.chat_box, 0, modules.Qt.AlignBottom)
 
-        self.setLayout(self.chat_option)
+        widget = modules.QWidget()
+        widget.setLayout(self.chat_layout)
+        self.layout_stack.addWidget(widget)
 
     def resizeEvent(self, a0: modules.QResizeEvent) -> None:
         super().resizeEvent(a0)
@@ -51,12 +65,16 @@ class ChatUI(modules.QFrame):
         self.chat_room.add_txt_msg(ChatType.RECEIVER, document=self.chat_box.document(), text=text)
 
     def open_chat(self):
-        self.chat_open = True
-        #self.setLayout(self.chat_layout)
-        self.setVisible(True)
+        # if not self.chat_open:
+        #     self.open_option()
+        # else:
+        #     self.chat_open = True
+        #     self.layout_stack.setCurrentIndex(0)
+        #     self.setVisible(True)
+        pass
 
     def open_option(self):
-        self.setLayout(self.chat_option)
+        self.layout_stack.setCurrentIndex(0)
 
     def close(self):
         self.chat_open = False
