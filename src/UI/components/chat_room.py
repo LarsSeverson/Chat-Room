@@ -5,8 +5,8 @@ from src.core.chat import ChatType
 from UI.widgets.text.no_scroll_browser import NoScrollTextBrowser
 
 class ChatRoom(modules.QScrollArea):
-    def __init__(self, frame=None):
-        super().__init__(frame)
+    def __init__(self):
+        super().__init__()
 
         self.scrollarea = modules.QScrollArea()
 
@@ -25,7 +25,7 @@ class ChatRoom(modules.QScrollArea):
         self.setWidget(self.contents)
         self.setObjectName('chat_room')
 
-        self.setVisible(False)
+        self.setVisible(True)
 
     def add_txt_msg(self, type: ChatType, document: modules.QTextDocument, text: str = ''):
         msg = NoScrollTextBrowser()

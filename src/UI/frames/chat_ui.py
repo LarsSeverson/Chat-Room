@@ -19,10 +19,6 @@ class ChatUI(modules.QFrame):
         self.setFrameShadow(modules.QFrame.Raised)
         self.setStyleSheet('background-color: rgb(240, 240, 240);')
 
-        self.chat_room = ChatRoom(self)
-        self.chat_box = ChatBox(self)
-        self.chat_box.set_send_callback(self.send_txt_msg)
-
         self.layout_stack = modules.QStackedLayout()
 
         self.create_option_layout()
@@ -41,6 +37,11 @@ class ChatUI(modules.QFrame):
         self.layout_stack.addWidget(widget)
 
     def create_chat_layout(self):
+
+        self.chat_room = ChatRoom()
+        self.chat_box = ChatBox()
+        self.chat_box.set_send_callback(self.send_txt_msg)
+
         self.chat_layout = modules.QVBoxLayout()
         self.chat_layout.addWidget(self.chat_room, 0)
         self.chat_layout.addWidget(self.chat_box, 0, modules.Qt.AlignBottom)
@@ -65,13 +66,12 @@ class ChatUI(modules.QFrame):
         self.chat_room.add_txt_msg(ChatType.RECEIVER, document=self.chat_box.document(), text=text)
 
     def open_chat(self):
-        # if not self.chat_open:
-        #     self.open_option()
-        # else:
-        #     self.chat_open = True
-        #     self.layout_stack.setCurrentIndex(0)
-        #     self.setVisible(True)
-        pass
+        if not self.chat_open:
+            self.layout_stack.setCurrentIndex(0)
+        else:
+            self.layout_stack.setCurrentIndex(1)
+
+        self.chat_open = True
 
     def open_option(self):
         self.layout_stack.setCurrentIndex(0)

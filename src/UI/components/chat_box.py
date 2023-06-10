@@ -1,7 +1,7 @@
 import modules
 class ChatBox(modules.QTextEdit):
-    def __init__(self, frame):
-        super().__init__(frame)
+    def __init__(self):
+        super().__init__()
 
         self.font = modules.QFont()
         self.font.setFamily('Comic Sans MS')
@@ -39,7 +39,7 @@ class ChatBox(modules.QTextEdit):
         self.send_button.clicked.connect(self.send_message)    
         self.textChanged.connect(self.text)
 
-        self.setVisible(False)
+        self.setVisible(True)
  
     def keyPressEvent(self, e: modules.QKeyEvent) -> None:
         if e.key() == modules.Qt.Key.Key_Return or e.key() == modules.Qt.Key_Enter:
@@ -62,7 +62,7 @@ class ChatBox(modules.QTextEdit):
         if len(self.toPlainText()) == 0:
             self.send_button.setIcon(self.send_idle_icon)
             self.send_button.setStyleSheet('''
-            QPushButton#sender_button {
+            QPushButton#sender_bud {
                 background-color: transparent;
                 border: none;
             }
@@ -70,11 +70,11 @@ class ChatBox(modules.QTextEdit):
         else:
             self.send_button.setIcon(self.send_icon)
             self.send_button.setStyleSheet('''
-            QPushButton#sender_button {
+            QPushButton#sender_bud {
                 background-color: transparent;
                 border: none;
             }
-            QPushButton#senderbud:hover{
+            QPushButton#sender_bud:hover{
                 border-radius: 12px;
                 background-color: rgb(229, 229, 229);
             }

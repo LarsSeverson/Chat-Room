@@ -12,6 +12,7 @@ class Chat:
         self.msg_buf = []
 
         self.server_active = False
+        self.room_active = False
 
     def create_room(self, host, room_id = 1234):
         if host:
@@ -25,6 +26,8 @@ class Chat:
 
         self.client_thread = threading.Thread(target=self.client.listen)
         self.client_thread.start()
+
+        self.room_active = True
         
     def quit_room(self):
         self.client.close()
@@ -36,8 +39,8 @@ class Chat:
             self.server_thread.join()
 
     def receive_txt_msg(self, text):
-        #self.msg_buf.append(text)
-        self.client.msg = text
+        if self.room_active:
+            self.client.msg = text
 
     def send_txt_msg(self, text):
         self.send_callback(text)
