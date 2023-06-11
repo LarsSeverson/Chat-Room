@@ -68,7 +68,7 @@ class ChatUI(modules.QFrame):
     def open_chat(self):
         if not self.chat_open:
             self.layout_stack.setCurrentIndex(0)
-        else:
+        elif self.chat_option.can_create():
             self.layout_stack.setCurrentIndex(1)
 
         self.chat_open = True

@@ -24,3 +24,5 @@ class ChatFormFrame(modules.QFrame):
     def join_room_open(self):
         self.create_frame.setVisible(False)
         self.join_frame.setVisible(True)
+
+

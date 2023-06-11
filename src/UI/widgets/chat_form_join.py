@@ -45,3 +45,4 @@ class ChatFormJoin(modules.QFrame):
     
     def resizeEvent(self, a0: modules.QResizeEvent) -> None:
         return super().resizeEvent(a0)
+

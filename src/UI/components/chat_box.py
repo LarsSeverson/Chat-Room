@@ -1,4 +1,5 @@
 import modules
+
 class ChatBox(modules.QTextEdit):
     def __init__(self):
         super().__init__()

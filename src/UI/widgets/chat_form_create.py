@@ -39,5 +39,9 @@ class ChatFormCreate(modules.QFrame):
         self.layout.addLayout(self.middle_layout)
         self.layout.addLayout(self.bottom_layout)
         self.layout.addWidget(self.create_room_label, 0, modules.Qt.AlignHCenter)
+
+    def can_create(self) -> bool:
+        return self.username.check
+
     
 
