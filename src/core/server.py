@@ -2,15 +2,15 @@ from modules import socket, select, multiprocessing
 
 HEADER_LENGTH = 10
 
-IP = '127.0.0.1'
+HOST = ''
 PORT = 1234
 
 class ChatServer:
     def __init__(self) -> None:
-        
+
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.socket.bind((IP, PORT))
+        self.socket.bind((HOST, PORT))
         self.socket.listen()
 
 
@@ -19,7 +19,7 @@ class ChatServer:
 
         self.server_active = True
 
-        print(f'LOG: Listening for connections on {IP}: {PORT}...')
+        print(f'LOG: Listening for connections on {HOST}: {PORT}...')
 
     def broadcast(self, notif_socket, message):
         user = self.clients[notif_socket]

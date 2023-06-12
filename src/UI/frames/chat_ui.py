@@ -67,18 +67,24 @@ class ChatUI(modules.QFrame):
 
     def open_chat(self):
         if not self.chat_open:
-            self.layout_stack.setCurrentIndex(0)
+            self.open_option()
         elif self.chat_option.can_create():
             self.layout_stack.setCurrentIndex(1)
+            self.start_chat(True, self.chat_option.get_user())
 
         self.chat_open = True
 
+        self.setVisible(True)
+
     def open_option(self):
         self.layout_stack.setCurrentIndex(0)
+        self.setVisible(True)
+        self.chat_open = False
 
     def close(self):
-        self.chat_open = False
         self.setVisible(False)
 
     def set_send_callback(self, func):
         self.send_callback = func
+    def set_backend_start_callback(self, func):
+        self.start_chat = func

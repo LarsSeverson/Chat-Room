@@ -22,5 +22,7 @@ class ChatOption(modules.QGridLayout):
         self.addWidget(self.padding3, 1, 2, 1, 1 )
         self.addWidget(self.padding4, 2, 1, 1, 1)
 
-    def can_create(self):
+    def can_create(self) -> bool:
         return self.option_frame.form_frame.create_frame.can_create()
+    def get_user(self) -> str:
+        return self.option_frame.form_frame.create_frame.username.text()

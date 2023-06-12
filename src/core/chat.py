@@ -14,14 +14,14 @@ class Chat:
         self.server_active = False
         self.room_active = False
 
-    def create_room(self, host, room_id = 1234):
+    def create_room(self, host: bool, user: str, room_id: int = 1234):
         if host:
             self.server_active = True
             self.server = ChatServer()
             self.server_thread = threading.Thread(target=self.server.run)
             self.server_thread.start()
 
-        self.client = ChatClient(PORT=room_id)
+        self.client = ChatClient(PORT=room_id, user=user)
         self.client.set_msg_send_callback(self.send_txt_msg)
 
         self.client_thread = threading.Thread(target=self.client.listen)

@@ -4,11 +4,11 @@ HEADER_LENGTH = 10
 IP = '127.0.0.1'
 
 class ChatClient:
-    def __init__(self, PORT) -> None:
+    def __init__(self, PORT, user) -> None:
         self.msg = ''
             
         self.client_active = True
-        self.username = 'lars'.encode('utf-8')
+        self.username = user.encode('utf-8')
         self.username_header = f'{len(self.username):<{HEADER_LENGTH}}'.encode('utf-8')
         
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

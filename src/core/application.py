@@ -24,10 +24,12 @@ class Application:
         self.window.set_text_callback(self.chat.receive_txt_msg)
         self.window.set_close(self.stop)
 
+        self.window.ui.chat.set_backend_start_callback(self.start_chat)
+
         self.chat.set_send_callback(self.backend_chat_send_msg)
     
-    def start_chat(self):
-        self.chat_process = multiprocessing.Process(target=self.chat.create_room(host=True))
+    def start_chat(self, host: bool, username: str = ''):
+        self.chat_process = multiprocessing.Process(target=self.chat.create_room(host, user=username))
         self.chat_process.start()
         self.chat_running = True
 
