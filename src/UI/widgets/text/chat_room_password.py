@@ -8,6 +8,8 @@ class FormPassword(modules.QLineEdit):
         self.font.setFamily('Franklin Gothic Small')
         self.font.setPointSize(12)
 
+        self.check = True
+
         self.setFont(self.font)
         self.setMinimumHeight(55)
         self.setSizePolicy(modules.QSizePolicy.Ignored, modules.QSizePolicy.Ignored)

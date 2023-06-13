@@ -18,11 +18,18 @@ class ChatFormFrame(modules.QFrame):
         self.setLayout(self.layout)
 
     def create_room_open(self):
-        self.create_frame.setVisible(True)
         self.join_frame.setVisible(False)
+        self.join_frame.username.clear()
+        self.join_frame.room_password.clear()
+        self.join_frame.room_id.clear()
+
+        self.create_frame.setVisible(True)
 
     def join_room_open(self):
         self.create_frame.setVisible(False)
+        self.create_frame.username.clear()
+        self.create_frame.room_password.clear()
+
         self.join_frame.setVisible(True)
 
 

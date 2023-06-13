@@ -35,4 +35,7 @@ class FormUsername(modules.QLineEdit):
             border-radius: 15px;
             border: 2px solid rgb(255, 192, 192);
             background-color: rgb(210, 210, 210);
-            ''')  
+            ''')
+    def clear(self) -> None:
+        self.check = False
+        return super().clear()

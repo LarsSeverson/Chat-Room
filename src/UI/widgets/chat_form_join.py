@@ -46,3 +46,6 @@ class ChatFormJoin(modules.QFrame):
     def resizeEvent(self, a0: modules.QResizeEvent) -> None:
         return super().resizeEvent(a0)
 
+    def can_join(self) -> bool:
+        return (self.username.check and self.room_password.check and self.room_id.match)
+

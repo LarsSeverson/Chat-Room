@@ -6,7 +6,7 @@ class FormID(modules.QLineEdit):
     def __init__(self):
         super().__init__()
 
-        self.check = True
+        self.match = True
 
         self.font = modules.QFont()
         self.font.setFamily('Franklin Gothic Small')
@@ -33,9 +33,10 @@ class FormID(modules.QLineEdit):
             background-color: rgb(210, 210, 210);
             border: 2px solid rgb(160, 200, 160);
             ''')
+            self.match = True
         else:
             self.setStyleSheet('''
             border-radius: 15px;
             border: 2px solid rgb(255, 192, 192);
             background-color: rgb(210, 210, 210);
-            ''')  
+            ''')

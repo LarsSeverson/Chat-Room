@@ -1,7 +1,13 @@
-from modules import threading, Enum
+from modules import threading, Enum, random, socket
 
 from src.core.client import ChatClient
 from src.core.server import ChatServer
+
+'''
+    For now the room_id variable will be simply useless. I'll need to set up
+    a database where users from any device can access a range of active servers
+    via the servers' unique id. Something for down the road.
+'''
 
 class ChatType(Enum):
     SENDER = 1
@@ -17,18 +23,19 @@ class Chat:
     def create_room(self, host: bool, user: str, room_id: int = 1234):
         if host:
             self.server_active = True
-            self.server = ChatServer()
+            self.server = ChatServer(server_id=self.gen_unique_id())
             self.server_thread = threading.Thread(target=self.server.run)
             self.server_thread.start()
 
-        self.client = ChatClient(PORT=room_id, user=user)
+        # the room_id will essentially just be the port for now. For safety
+        # I'll keep it at 1234
+        self.client = ChatClient(room_id, user)
         self.client.set_msg_send_callback(self.send_txt_msg)
 
         self.client_thread = threading.Thread(target=self.client.listen)
         self.client_thread.start()
-
         self.room_active = True
-        
+
     def quit_room(self):
         self.client.close()
         self.client_thread.join()
@@ -41,6 +48,9 @@ class Chat:
     def receive_txt_msg(self, text):
         if self.room_active:
             self.client.msg = text
+
+    def gen_unique_id(self) -> int:
+        return random.randint(1000, 9999)
 
     def send_txt_msg(self, text):
         self.send_callback(text)

@@ -2,18 +2,19 @@ from modules import socket, select, multiprocessing
 
 HEADER_LENGTH = 10
 
-HOST = ''
+# currently only local host
+HOST = '127.0.0.1'
 PORT = 1234
 
 class ChatServer:
-    def __init__(self) -> None:
+    def __init__(self, server_id: int = 0000) -> None:
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.socket.bind((HOST, PORT))
         self.socket.listen()
 
-
+        self.server_id = server_id
         self.sockets_list = [self.socket]
         self.clients = {}
 

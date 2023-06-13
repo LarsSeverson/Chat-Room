@@ -3,6 +3,7 @@ import modules
 from UI.components.chat_room import ChatRoom
 from UI.components.chat_box import ChatBox
 from UI.components.chat_option import ChatOption
+from UI.components.chat_loading import ChatLoading
 
 from src.core.chat import ChatType
 
@@ -23,13 +24,14 @@ class ChatUI(modules.QFrame):
 
         self.create_option_layout()
         self.create_chat_layout()
+        self.create_loading_layout()
 
         self.layout_stack.setCurrentIndex(0)
         self.setLayout(self.layout_stack)
-
     def create_option_layout(self):
         self.chat_option = ChatOption()
         self.chat_option.option_frame.form_frame.create_frame.create_room_button.clicked.connect(self.open_chat)
+        self.chat_option.option_frame.form_frame.join_frame.join_room_button.clicked.connect(self.open_chat)
 
         # dummy widget which is necessary for the layout stack
         widget = modules.QWidget()
@@ -49,6 +51,10 @@ class ChatUI(modules.QFrame):
         widget = modules.QWidget()
         widget.setLayout(self.chat_layout)
         self.layout_stack.addWidget(widget)
+
+    def create_loading_layout(self):
+        self.chat_loading = ChatLoading()
+        self.chat_option.addWidget(self.chat_loading, 1, 1, 1, 1)
 
     def resizeEvent(self, a0: modules.QResizeEvent) -> None:
         super().resizeEvent(a0)
@@ -71,6 +77,22 @@ class ChatUI(modules.QFrame):
         elif self.chat_option.can_create():
             self.layout_stack.setCurrentIndex(1)
             self.start_chat(True, self.chat_option.get_user())
+        elif self.chat_option.can_join():
+
+            self.chat_loading.setVisible(True)
+            self.chat_option.option_frame.setVisible(False)
+
+            loop = modules.QEventLoop()
+            self.chat_loading.check('127.0.0.1', self.chat_option.get_port())
+            self.chat_loading.thread.finished.connect(loop.quit)
+            loop.exec_()
+
+            if self.chat_loading.success:
+                self.layout_stack.setCurrentIndex(1)
+                self.start_chat(False, self.chat_option.get_user())
+            else:
+                self.chat_loading.setVisible(False)
+                self.chat_option.option_frame.setVisible(True)
 
         self.chat_open = True
 
