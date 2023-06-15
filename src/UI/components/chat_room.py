@@ -29,10 +29,7 @@ class ChatRoom(modules.QScrollArea):
 
     def add_txt_msg(self, type: ChatType, document: modules.QTextDocument, text: str = ''):
         msg = NoScrollTextBrowser()
-        msg.setDocument(document.clone())
-
-        if text:
-            msg.setText(text)
+        msg.setDocument(document.clone(), text)
 
         if type == ChatType.SENDER:
             msg.setObjectName('sender_message')

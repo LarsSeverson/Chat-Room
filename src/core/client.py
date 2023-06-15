@@ -35,9 +35,10 @@ class ChatClient:
                 while self.client_active:
                     username_header = self.socket.recv(HEADER_LENGTH)
 
-                    if not username_header:
+                    if not len(username_header):
                         print('Connection closed')
                         self.close()
+                        return
 
                     username_length = int(username_header.decode('utf-8').strip())
                     username = self.socket.recv(username_length).decode('utf-8')

@@ -25,14 +25,17 @@ class NoScrollTextBrowser(modules.QTextBrowser):
         }}
         """
         )
-        self.setSizePolicy(modules.QSizePolicy.Preferred, modules.QSizePolicy.Fixed) 
+        self.setSizePolicy(modules.QSizePolicy.Fixed, modules.QSizePolicy.Fixed) 
         #self.setSizeAdjustPolicy(modules.QTextBrowser.AdjustToContents)
 
     def wheelEvent(self, e: modules.QWheelEvent) -> None:
         e.ignore()
 
-    def setDocument(self, document: modules.QTextDocument) -> None:
+    def setDocument(self, document: modules.QTextDocument, text: str) -> None:
         super().setDocument(document)
+
+        if text:
+            self.setText(text)
 
         font_metrix = modules.QFontMetrics(self.font())
         text_width = font_metrix.width(self.toPlainText())
@@ -55,6 +58,6 @@ class NoScrollTextBrowser(modules.QTextBrowser):
         super().resizeEvent(a0)
         
         doc_size = self.document().size().toSize()
-
+        
         self.setFixedHeight(doc_size.height())
         self.setFixedWidth(doc_size.width()+10)
