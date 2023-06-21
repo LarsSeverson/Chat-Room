@@ -52,8 +52,8 @@ class Chat:
     def gen_unique_id(self) -> int:
         return random.randint(1000, 9999)
 
-    def send_txt_msg(self, text):
-        self.send_callback(text)
+    def send_txt_msg(self, msg_info):
+        self.send_callback(msg_info)
     
     def set_send_callback(self, func):
         self.send_callback = func

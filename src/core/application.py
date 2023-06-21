@@ -4,7 +4,6 @@ from core.window import Window
 from core.chat import Chat
 
 '''
-
                                      Application
                                      /        \
  sends and receives from frontend - /          \ - sends and receives messages to / from backend
@@ -33,8 +32,8 @@ class Application:
         self.chat_process.start()
         self.chat_running = True
 
-    def backend_chat_send_msg(self, message):
-        self.window.ui.chat.message_received.emit(message)
+    def backend_chat_send_msg(self, msg_info):
+        self.window.ui.chat.message_received.emit(msg_info)
 
     def run(self):
         self.window.show()

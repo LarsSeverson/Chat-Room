@@ -1,5 +1,7 @@
 from modules import socket, select, errno, multiprocessing
 
+from src.core.chat_msg_data import ChatMsgData
+
 HEADER_LENGTH = 10
 IP = '127.0.0.1'
 
@@ -8,6 +10,7 @@ class ChatClient:
         self.msg = ''
             
         self.client_active = True
+        self.str_username = user
         self.username = user.encode('utf-8')
         self.username_header = f'{len(self.username):<{HEADER_LENGTH}}'.encode('utf-8')
         
@@ -47,7 +50,7 @@ class ChatClient:
                     message_length = int(message_header.decode('utf-8').strip())
                     message = self.socket.recv(message_length).decode('utf-8')
 
-                    self.send_callback(message)
+                    self.send_callback(ChatMsgData(message, username))
             except IOError as e:
                 if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
                     print('LOG: Reading error: '.format(str(e)))

@@ -26,7 +26,7 @@ class ChatOption(modules.QGridLayout):
         return self.option_frame.form_frame.create_frame.can_create()
     def can_join(self) -> bool:
         return self.option_frame.form_frame.join_frame.can_join()
-    def get_user(self) -> str:
-        return self.option_frame.form_frame.create_frame.username.text()
+    def get_user(self):
+        return (self.option_frame.form_frame.create_frame.username.text(), self.option_frame.form_frame.join_frame.username.text())
     def get_port(self) -> int:
         return int(self.option_frame.form_frame.join_frame.room_id.text())

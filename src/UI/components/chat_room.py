@@ -3,6 +3,7 @@ import modules
 from src.core.chat import ChatType
 
 from UI.widgets.text.no_scroll_browser import NoScrollTextBrowser
+from UI.components.chat_msg import ChatMsg
 
 class ChatRoom(modules.QScrollArea):
     def __init__(self):
@@ -27,15 +28,15 @@ class ChatRoom(modules.QScrollArea):
 
         self.setVisible(True)
 
-    def add_txt_msg(self, type: ChatType, document: modules.QTextDocument, text: str = ''):
-        msg = NoScrollTextBrowser()
-        msg.setDocument(document.clone(), text)
+    def add_txt_msg(self, type: ChatType, document: modules.QTextDocument, msg_info):
+        msg = ChatMsg(msg_info)
+        msg.set_document(document.clone(), msg_info.text)
 
         if type == ChatType.SENDER:
-            msg.setObjectName('sender_message')
+            msg.set_text_name('sender_message')
             self.layout.addWidget(msg, 0, modules.Qt.AlignRight | modules.Qt.AlignBottom)
         else:
-            msg.setObjectName('other_message')
+            msg.set_text_name('other_message')
             self.layout.addWidget(msg, 0, modules.Qt.AlignLeft | modules.Qt.AlignBottom)
         
         self.num_msgs += 1

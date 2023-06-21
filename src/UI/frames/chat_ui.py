@@ -6,15 +6,17 @@ from UI.components.chat_option import ChatOption
 from UI.components.chat_loading import ChatLoading
 
 from src.core.chat import ChatType
+from src.core.chat_msg_data import ChatMsgData
 
 class ChatUI(modules.QFrame):
 
-    message_received = modules.pyqtSignal(str)
+    message_received = modules.pyqtSignal(ChatMsgData)
 
     def __init__(self, central_widget) -> None:
         super().__init__()
 
         self.chat_open = False
+        self.username = ''
 
         self.setFrameShape(modules.QFrame.StyledPanel)
         self.setFrameShadow(modules.QFrame.Raised)
@@ -65,18 +67,19 @@ class ChatUI(modules.QFrame):
         #self.chat_box.resize(width, height)
 
     def send_txt_msg(self, document):
-        self.chat_room.add_txt_msg(ChatType.SENDER, document=document)
+        self.chat_room.add_txt_msg(ChatType.SENDER, document=document, msg_info=ChatMsgData(user=self.username))
         self.send_callback(document.toPlainText())
 
-    def receive_txt_msg(self, text: str):
-        self.chat_room.add_txt_msg(ChatType.RECEIVER, document=self.chat_box.document(), text=text)
+    def receive_txt_msg(self, msg_data: ChatMsgData):
+        self.chat_room.add_txt_msg(ChatType.RECEIVER, document=self.chat_box.document(), msg_info=msg_data)
 
     def open_chat(self):
         if not self.chat_open:
             self.open_option()
         elif self.chat_option.can_create():
             self.layout_stack.setCurrentIndex(1)
-            self.start_chat(True, self.chat_option.get_user())
+            self.start_chat(True, self.chat_option.get_user()[0])
+            self.username = self.chat_option.get_user()[0]
         elif self.chat_option.can_join():
 
             self.chat_loading.setVisible(True)
@@ -89,7 +92,8 @@ class ChatUI(modules.QFrame):
 
             if self.chat_loading.success:
                 self.layout_stack.setCurrentIndex(1)
-                self.start_chat(False, self.chat_option.get_user())
+                self.start_chat(False, self.chat_option.get_user()[1])
+                self.username = self.chat_option.get_user()[1]
             else:
                 self.chat_loading.setVisible(False)
                 self.chat_option.option_frame.setVisible(True)
